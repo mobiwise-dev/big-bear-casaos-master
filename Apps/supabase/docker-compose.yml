@@ -6,7 +6,7 @@ services:
   #############################################################################
   studio:
     container_name: supabase-studio
-    image: supabase/studio:20250310-6a23794
+    image: supabase/studio:20250303-484805c
     restart: unless-stopped
     ports:
       - target: 3000
@@ -22,33 +22,36 @@ services:
         condition: service_healthy
     environment:
       STUDIO_PG_META_URL: http://meta:8080
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
 
-      DEFAULT_ORGANIZATION_NAME: ${STUDIO_DEFAULT_ORGANIZATION}
-      DEFAULT_PROJECT_NAME: ${STUDIO_DEFAULT_PROJECT}
-
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      DEFAULT_ORGANIZATION_NAME: Default Organization
+      DEFAULT_PROJECT_NAME: Default Project
+      OPENAI_API_KEY: your_openapi_key
 
       SUPABASE_URL: http://kong:8000
-      SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
+      SUPABASE_PUBLIC_URL: http://localhost:8000
 
-      AUTH_JWT_SECRET: ${JWT_SECRET}
-      SUPABASE_ANON_KEY: ${ANON_KEY}
-      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      AUTH_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
 
-      LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
+      LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
       LOGFLARE_URL: http://analytics:4000
-      NEXT_PUBLIC_ENABLE_LOGS: true
+      NEXT_PUBLIC_ENABLE_LOGS: "true"
       NEXT_ANALYTICS_BACKEND_PROVIDER: postgres # or bigquery
     # ---------------------------------------------------------------------------
     x-casaos: # CasaOS specific configuration
       envs:
+        - container: STUDIO_PG_META_URL
+          description:
+            en_us: The URL for the Postgres Meta database
+            fr_fr: L'URL pour la base de données Postgres Meta
         - container: POSTGRES_PASSWORD
           description:
             en_us: The password for the Postgres database
             fr_fr: Le mot de passe de la base de données Postgres
 
-        - container: DEFAULT_ORGANIZATION_NAME
+        - container: STUDIO_DEFAULT_ORGANIZATION
           description:
             en_us: The default organization name for Supabase Studio
             fr_fr: Le nom de l'organisation par défaut pour Supabase Studio
@@ -56,12 +59,15 @@ services:
           description:
             en_us: The default project name for Supabase Studio
             fr_fr: Le nom du projet par défaut pour Supabase Studio
-
         - container: OPENAI_API_KEY
           description:
             en_us: The OpenAI API key for Supabase Studio
             fr_fr: La clé API OpenAI pour Supabase Studio
 
+        - container: SUPABASE_URL
+          description:
+            en_us: The URL for Supabase
+            fr_fr: L'URL pour Supabase
         - container: SUPABASE_PUBLIC_URL
           description:
             en_us: The public URL for Supabase Studio
@@ -69,22 +75,25 @@ services:
 
         - container: AUTH_JWT_SECRET
           description:
-            en_us: The JWT secret for Supabase
-            fr_fr: Le secret JWT pour Supabase
+            en_us: The JWT secret for Supabase Studio
+            fr_fr: Le secret JWT pour Supabase Studio
         - container: SUPABASE_ANON_KEY
           description:
-            en_us: The anonymous key for Supabase (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
-            fr_fr: La clé anonyme pour Supabase (pour générer, visitez https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+            en_us: The anonymous key for Supabase Studio (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+            fr_fr: La clé anonyme pour Supabase Studio (pour générer, visitez https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
         - container: SUPABASE_SERVICE_KEY
           description:
-            en_us: The service role key for Supabase (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
-            fr_fr: La clé de rôle de service pour Supabase (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+            en_us: The service role key for Supabase Studio (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+            fr_fr: La clé de rôle de service pour Supabase Studio (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
 
         - container: LOGFLARE_API_KEY
           description:
             en_us: The Logflare API key for Supabase Studio
             fr_fr: La clé API Logflare pour Supabase Studio
-
+        - container: LOGFLARE_URL
+          description:
+            en_us: The URL for Logflare
+            fr_fr: L'URL pour Logflare
         - container: NEXT_PUBLIC_ENABLE_LOGS
           description:
             en_us: Enable logs in Supabase Studio
@@ -104,10 +113,10 @@ services:
     # Publish container ports 8000 and 8443 to host ports 8000 and 8443
     ports:
       - target: 8000
-        published: ${KONG_HTTP_PORT}:8000
+        published: 8000
         protocol: tcp
       - target: 8443
-        published: ${KONG_HTTP_PORT}:8443
+        published: 8443
         protocol: tcp
     volumes:
       - ./volumes/api/kong.yml:/home/kong/temp.yml:ro
@@ -121,12 +130,10 @@ services:
       KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
       KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
       KONG_NGINX_PROXY_PROXY_BUFFERS: "64 160k"
-
-      SUPABASE_ANON_KEY: ${ANON_KEY}
-      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
-
-      DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
-      DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      DASHBOARD_USERNAME: supabase
+      DASHBOARD_PASSWORD: this_password_is_insecure_and_should_be_updated
     entrypoint: >
       bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
 
@@ -156,8 +163,8 @@ services:
             fr_fr: Le nom d'utilisateur pour le tableau de bord
         - container: DASHBOARD_PASSWORD
           description:
-            en_us: The password for the dashboard
-            fr_fr: Le mot de passe pour le tableau de bord
+            en_us: The password for the Kong dashboard
+            fr_fr: Le mot de passe pour le tableau de bord de Kong
 
   #############################################################################
   # Auth (GoTrue)
@@ -179,26 +186,22 @@ services:
     environment:
       GOTRUE_API_HOST: "0.0.0.0"
       GOTRUE_API_PORT: 9999
-      API_EXTERNAL_URL: ${API_EXTERNAL_URL}
-
+      API_EXTERNAL_URL: http://localhost:8000
       GOTRUE_DB_DRIVER: postgres
       GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-
-      GOTRUE_SITE_URL: ${SITE_URL}
-      GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS}
-      GOTRUE_DISABLE_SIGNUP: ${DISABLE_SIGNUP}
+      GOTRUE_SITE_URL: http://localhost:3000
+      GOTRUE_URI_ALLOW_LIST:
+      GOTRUE_DISABLE_SIGNUP: false
 
       GOTRUE_JWT_ADMIN_ROLES: service_role
       GOTRUE_JWT_AUD: authenticated
       GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
-      GOTRUE_JWT_EXP: ${JWT_EXPIRY}
-      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
 
-      GOTRUE_EXTERNAL_EMAIL_ENABLED: ${ENABLE_EMAIL_SIGNUP}
-      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: ${ENABLE_ANONYMOUS_USERS}
-      GOTRUE_MAILER_AUTOCONFIRM: ${ENABLE_EMAIL_AUTOCONFIRM}
-
-      GOTRUE_SMTP_MAX_FREQUENCY: 1s
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: true
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: false
+      GOTRUE_MAILER_AUTOCONFIRM: false
       GOTRUE_SMTP_ADMIN_EMAIL: admin@example.com
       GOTRUE_SMTP_HOST: supabase-mail
       GOTRUE_SMTP_PORT: 2500
@@ -210,10 +213,16 @@ services:
       GOTRUE_MAILER_URLPATHS_RECOVERY: recovery@example.com
       GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: change@example.com
 
-      GOTRUE_EXTERNAL_PHONE_ENABLED: ${ENABLE_PHONE_SIGNUP}
-      GOTRUE_SMS_AUTOCONFIRM: ${ENABLE_PHONE_AUTOCONFIRM}
+      GOTRUE_EXTERNAL_PHONE_ENABLED: true
+      GOTRUE_SMS_AUTOCONFIRM: true
 
-      GOTRUE_EXTERNAL_GOOGLE_ENABLED: true
+      GOTRUE_EXTERNAL_APPLE_ENABLED: false
+      GOTRUE_EXTERNAL_APPLE_CLIENT_ID: ""
+      GOTRUE_EXTERNAL_APPLE_SECRET: ""
+      GOTRUE_EXTERNAL_APPLE_REDIRECT_URI: ""
+      GOTRUE_EXTERNAL_APPLE_URL: ""
+
+      GOTRUE_EXTERNAL_GOOGLE_ENABLED: false
       GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: ""
       GOTRUE_EXTERNAL_GOOGLE_SECRET: ""
       GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: ""
@@ -258,11 +267,6 @@ services:
           description:
             en_us: Enable mailer autoconfirm for GoTrue (true or false)
             fr_fr: Activer le mailer autoconfirm pour GoTrue (true ou false)
-
-        - container: GOTRUE_SMTP_MAX_FREQUENCY
-          description:
-            en_us: The SMTP max frequency for GoTrue
-            fr_fr: La fréquence maximale SMTP pour GoTrue
         - container: GOTRUE_SMTP_ADMIN_EMAIL
           description:
             en_us: The SMTP admin email for GoTrue
@@ -313,6 +317,23 @@ services:
             en_us: Enable SMS autoconfirm for GoTrue (true or false)
             fr_fr: Activer le SMS autoconfirm pour GoTrue (true ou false)
 
+        - container: GOTRUE_EXTERNAL_APPLE_ENABLED
+          description:
+            en_us: Enable external Apple for GoTrue (true or false)
+            fr_fr: Activer Apple externe pour GoTrue (true ou false)
+        - container: GOTRUE_EXTERNAL_APPLE_CLIENT_ID
+          description:
+            en_us: The external Apple client ID for GoTrue
+            fr_fr: L'identifiant client Apple externe pour GoTrue
+        - container: GOTRUE_EXTERNAL_APPLE_SECRET
+          description:
+            en_us: The external Apple secret for GoTrue
+            fr_fr: Le secret Apple externe pour GoTrue
+        - container: GOTRUE_EXTERNAL_APPLE_REDIRECT_URI
+          description:
+            en_us: The URI Apple will redirect to with the code and state values.
+            fr_fr: L'URI vers laquelle Apple redirigera avec les valeurs de code et d'état.
+
         - container: GOTRUE_EXTERNAL_GOOGLE_ENABLED
           description:
             en_us: Enable external Google for GoTrue (true or false)
@@ -344,13 +365,12 @@ services:
         condition: service_healthy
     environment:
       PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS}
-      PGRST_DB_ANON_ROLE: anon
-      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: "anon"
+      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
       PGRST_DB_USE_LEGACY_GUCS: "false"
-      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
-      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
-    command: ["postgrest"]
+      PGRST_APP_SETTINGS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      PGRST_APP_SETTINGS_JWT_EXP: 3600
 
     x-casaos: # CasaOS specific configuration
       envs:
@@ -362,6 +382,10 @@ services:
           description:
             en_us: The database schemas for PostgREST
             fr_fr: Les schémas de base de données pour PostgREST
+        - container: PGRST_DB_ANON_ROLE
+          description:
+            en_us: The anonymous role for PostgREST
+            fr_fr: Le rôle anonyme pour PostgREST
         - container: PGRST_JWT_SECRET
           description:
             en_us: The JWT secret for PostgREST
@@ -394,21 +418,21 @@ services:
       retries: 3
     environment:
       PORT: 4000
-      DB_HOST: ${POSTGRES_HOST}
-      DB_PORT: ${POSTGRES_PORT}
+      DB_HOST: db
+      DB_PORT: 5432
       DB_USER: supabase_admin
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_NAME: ${POSTGRES_DB}
+      DB_PASSWORD: your-super-secret-and-long-postgres-password
+      DB_NAME: postgres
       DB_AFTER_CONNECT_QUERY: "SET search_path TO _realtime"
       DB_ENC_KEY: supabaserealtime
-      API_JWT_SECRET: ${JWT_SECRET}
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      ERL_AFLAGS: -proto_dist inet_tcp
+      API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+      ERL_AFLAGS: "-proto_dist inet_tcp"
       DNS_NODES: "''"
-      RLIMIT_NOFILE: "10000"
+      RLIMIT_NOFILE: 10000
       APP_NAME: realtime
-      SEED_SELF_HOST: true
-      RUN_JANITOR: true
+      SEED_SELF_HOST: "true"
+      RUN_JANITOR: "true"
 
     x-casaos:
       envs:
@@ -459,15 +483,16 @@ services:
       imgproxy:
         condition: service_started
     environment:
-      ANON_KEY: ${ANON_KEY}
-      SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
       POSTGREST_URL: http://rest:3000
-      PGRST_JWT_SECRET: ${JWT_SECRET}
       DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       FILE_SIZE_LIMIT: 52428800
-      STORAGE_BACKEND: file
+      STORAGE_BACKEND: "file"
       FILE_STORAGE_BACKEND_PATH: /var/lib/storage
-      TENANT_ID: stub
+      TENANT_ID: "stub"
+      REGION: "stub"
       GLOBAL_S3_BUCKET: "stub"
       ENABLE_IMAGE_TRANSFORMATION: "true"
       IMGPROXY_URL: http://imgproxy:5001
@@ -528,11 +553,11 @@ services:
         condition: service_healthy
     environment:
       PG_META_PORT: 8080
-      PG_META_DB_HOST: ${POSTGRES_HOST}
-      PG_META_DB_PORT: ${POSTGRES_PORT}
-      PG_META_DB_NAME: ${POSTGRES_DB}
+      PG_META_DB_HOST: db
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: postgres
       PG_META_DB_USER: supabase_admin
-      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_META_DB_PASSWORD: your-super-secret-and-long-postgres-password
 
     x-casaos: # CasaOS specific configuration
       envs:
@@ -548,6 +573,10 @@ services:
           description:
             en_us: The database name for Postgres Meta
             fr_fr: Le nom de la base de données pour Postgres Meta
+        - container: PG_META_DB_USER
+          description:
+            en_us: The database user for Postgres Meta
+            fr_fr: L'utilisateur de la base de données pour Postgres Meta
         - container: PG_META_DB_PASSWORD
           description:
             en_us: The database password for Postgres Meta
@@ -567,11 +596,11 @@ services:
         condition: service_healthy
     environment:
       SUPABASE_URL: http://kong:8000
-      JWT_SECRET: ${JWT_SECRET}
-      SUPABASE_ANON_KEY: ${ANON_KEY}
-      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
       SUPABASE_DB_URL: postgresql://postgres:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-      VERIFY_JWT: "${FUNCTIONS_VERIFY_JWT}"
+      VERIFY_JWT: false
     command: ["start", "--main-service", "/home/deno/functions/main"]
 
     x-casaos: # CasaOS specific configuration
@@ -622,15 +651,14 @@ services:
       LOGFLARE_NODE_HOST: "127.0.0.1"
       DB_USERNAME: supabase_admin
       DB_DATABASE: _supabase
-      DB_HOSTNAME: ${POSTGRES_HOST}
-      DB_PORT: ${POSTGRES_PORT}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOSTNAME: db
+      DB_PORT: 5432
+      DB_PASSWORD: your-super-secret-and-long-postgres-password
       DB_SCHEMA: _analytics
-      LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
-      LOGFLARE_SINGLE_TENANT: true
-      LOGFLARE_SUPABASE_MODE: true
+      LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
+      LOGFLARE_SINGLE_TENANT: "true"
+      LOGFLARE_SUPABASE_MODE: "true"
       LOGFLARE_MIN_CLUSTER_SIZE: 1
-
       POSTGRES_BACKEND_URL: postgresql://supabase_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/_supabase
       POSTGRES_BACKEND_SCHEMA: _analytics
       LOGFLARE_FEATURE_FLAG_OVERRIDE: "multibackend=true"
@@ -689,15 +717,15 @@ services:
       vector:
         condition: service_healthy
     environment:
-      POSTGRES_HOST: /var/run/postgresql
-      PGPORT: ${POSTGRES_PORT}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      PGPASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATABASE: ${POSTGRES_DB}
-      POSTGRES_DB: ${POSTGRES_DB}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXP: ${JWT_EXPIRY}
+      POSTGRES_HOST: "/var/run/postgresql"
+      PGPORT: 5432
+      POSTGRES_PORT: 5432
+      PGPASSWORD: your-super-secret-and-long-postgres-password
+      POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
+      PGDATABASE: postgres
+      POSTGRES_DB: postgres
+      JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      JWT_EXP: 3600
     command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
 
     x-casaos: # CasaOS specific configuration
@@ -751,7 +779,7 @@ services:
       interval: 5s
       retries: 3
     environment:
-      LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
+      LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
     command: ["--config", "/etc/vector/vector.yml"]
 
     x-casaos: # CasaOS specific configuration
@@ -789,21 +817,21 @@ services:
         condition: service_healthy
     environment:
       PORT: 4000
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
       DATABASE_URL: ecto://supabase_admin:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/_supabase
-      CLUSTER_POSTGRES: true
-      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
-      VAULT_ENC_KEY: ${VAULT_ENC_KEY}
-      API_JWT_SECRET: ${JWT_SECRET}
-      METRICS_JWT_SECRET: ${JWT_SECRET}
+      CLUSTER_POSTGRES: "true"
+      SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+      VAULT_ENC_KEY: your-encryption-key-32-chars-min
+      API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      METRICS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
       REGION: local
-      ERL_AFLAGS: -proto_dist inet_tcp
-      POOLER_TENANT_ID: ${POOLER_TENANT_ID}
-      POOLER_DEFAULT_POOL_SIZE: ${POOLER_DEFAULT_POOL_SIZE}
-      POOLER_MAX_CLIENT_CONN: ${POOLER_MAX_CLIENT_CONN}
-      POOLER_POOL_MODE: transaction
+      ERL_AFLAGS: "-proto_dist inet_tcp"
+      POOLER_TENANT_ID: your-tenant-id
+      POOLER_DEFAULT_POOL_SIZE: 20
+      POOLER_MAX_CLIENT_CONN: 100
+      POOLER_POOL_MODE: "transaction"
     command: >
       /bin/sh -c '/app/bin/migrate && /app/bin/supavisor eval "$$(cat /etc/pooler/pooler.exs)" && /app/bin/server'
 
