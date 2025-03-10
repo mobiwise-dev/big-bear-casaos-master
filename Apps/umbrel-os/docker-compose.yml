@@ -69,7 +69,7 @@ x-casaos:
     # Title in English
     en_us: Umbrel OS
   # Application category
-  category: BigBearCasaOS
+  category: MobiWise
   # Port mapping information
   port_map: "8080"
   # Tips
