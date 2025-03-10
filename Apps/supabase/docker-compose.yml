@@ -901,8 +901,8 @@ x-casaos:
   developer: Supabase
   icon: https://cdn.jsdelivr.net/gh/mobiwise-dev/CasaOs-AppStore/Apps/supabase/supabase-logo-icon.png
   screenshot_link:
-    - https://cdn.jsdelivr.net/gh/mobiwise-dev/CasaOs-AppStore/Apps/supabase/supabase-table-editor.webm
-    - https://cdn.jsdelivr.net/gh/mobiwise-dev/CasaOs-AppStore/Apps/supabase/supabase-table-editor-light.webm
+    # - https://cdn.jsdelivr.net/gh/mobiwise-dev/CasaOs-AppStore/Apps/supabase/supabase-table-editor.webm
+    # - https://cdn.jsdelivr.net/gh/mobiwise-dev/CasaOs-AppStore/Apps/supabase/supabase-table-editor-light.webm
   tagline:
     en_us: Open-source alternative to Firebase
     fr_fr: Une alternative open-source à Firebase
