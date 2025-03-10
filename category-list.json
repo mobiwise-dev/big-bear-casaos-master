@@ -3,5 +3,10 @@
     "name": "BigBearCasaOS",
     "font": "bigbear",
     "description": ""
+  },
+  {
+    "name": "MobiWise",
+    "font": "mobiwise",
+    "description": ""
   }
 ]
