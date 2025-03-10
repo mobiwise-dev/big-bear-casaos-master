@@ -61,4 +61,4 @@ x-casaos:
   category: MobiWise # Application category
   port_map: "7350" # Port mapping information
   screenshot_link:
-    - https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-table-editor-light.webm
+    - https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-table-editor-light.gif
