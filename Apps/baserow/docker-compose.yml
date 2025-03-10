@@ -58,7 +58,7 @@ x-casaos:
   thumbnail: "https://github.com/bram2w/baserow/raw/master/docs/assets/screenshot.png" # Thumbnail image (currently empty)
   title:
     en_us: Baserow # Title in English
-  category: BigBearCasaOS # Application category
+  category: MobiWise # Application category
   port_map: "7350" # Port mapping information
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-table-editor-light.webm

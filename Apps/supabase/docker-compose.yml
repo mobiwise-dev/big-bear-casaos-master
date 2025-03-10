@@ -894,7 +894,7 @@ x-casaos:
     - arm
     - arm64
   author: MobiWise
-  category: MobiWise.dev
+  category: MobiWise
   description:
     en_us: Supabase is an open-source alternative to Firebase, providing authentication, databases, storage, and serverless functions.
     fr_fr: Supabase est une alternative open-source à Firebase, offrant authentification, bases de données, stockage et fonctions serverless.
