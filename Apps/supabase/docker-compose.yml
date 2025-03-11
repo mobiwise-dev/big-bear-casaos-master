@@ -291,63 +291,63 @@ services:
             en_us: The JWT expiry for PostgREST app settings
             fr_fr: L'expiration JWT pour les paramètres de l'application PostgREST
 
-  # #############################################################################
-  # # Storage
-  # #############################################################################
-  # storage:
-  #   container_name: supabase-storage
-  #   image: supabase/storage-api:v1.19.1
-  #   restart: unless-stopped
-  #   volumes:
-  #     - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
-  #   healthcheck:
-  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/status"]
-  #     timeout: 5s
-  #     interval: 5s
-  #     retries: 3
-  #   # depends_on:
-  #   #   db:
-  #   #     condition: service_healthy
-  #   #   rest:
-  #   #     condition: service_started
-  #   #   imgproxy:
-  #   #     condition: service_started
-  #   environment:
-  #     PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-  #     ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
-  #     SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
-  #     POSTGREST_URL: http://rest:3000
-  #     DATABASE_URL: postgres://supabase_storage_admin:your-super-secret-and-long-postgres-password@db:5432/postgres
-  #     FILE_SIZE_LIMIT: 52428800
-  #     STORAGE_BACKEND: file
-  #     FILE_STORAGE_BACKEND_PATH: /var/lib/storage
-  #     TENANT_ID: stub
-  #     GLOBAL_S3_BUCKET: "stub"
-  #     ENABLE_IMAGE_TRANSFORMATION: "true"
-  #     IMGPROXY_URL: http://imgproxy:5001
+  #############################################################################
+  # Storage
+  #############################################################################
+  storage:
+    container_name: supabase-storage
+    image: supabase/storage-api:v1.19.1
+    restart: unless-stopped
+    volumes:
+      - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/status"]
+      timeout: 5s
+      interval: 5s
+      retries: 3
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   rest:
+    #     condition: service_started
+    #   imgproxy:
+    #     condition: service_started
+    environment:
+      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      POSTGREST_URL: http://rest:3000
+      DATABASE_URL: postgres://supabase_storage_admin:your-super-secret-and-long-postgres-password@db:5432/postgres
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      GLOBAL_S3_BUCKET: "stub"
+      ENABLE_IMAGE_TRANSFORMATION: "true"
+      IMGPROXY_URL: http://imgproxy:5001
 
-  #   x-casaos: # CasaOS specific configuration #################################
-  #     envs:
-  #       - container: PGRST_JWT_SECRET
-  #         description:
-  #           en_us: The JWT secret for Storage
-  #           fr_fr: Le secret JWT pour le stockage
-  #       - container: ANON_KEY
-  #         description:
-  #           en_us: The anonymous key for Storage
-  #           fr_fr: La clé anonyme pour le stockage
-  #       - container: SERVICE_KEY
-  #         description:
-  #           en_us: The service role key for Storage
-  #           fr_fr: La clé de rôle de service pour le stockage
-  #       - container: DATABASE_URL
-  #         description:
-  #           en_us: The database URL for Storage
-  #           fr_fr: L'URL de la base de données pour le stockage
-  #     volumes:
-  #       - container: /var/lib/storage
-  #         description:
-  #           en_us: "Container Path: /var/lib/storage"
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: PGRST_JWT_SECRET
+          description:
+            en_us: The JWT secret for Storage
+            fr_fr: Le secret JWT pour le stockage
+        - container: ANON_KEY
+          description:
+            en_us: The anonymous key for Storage
+            fr_fr: La clé anonyme pour le stockage
+        - container: SERVICE_KEY
+          description:
+            en_us: The service role key for Storage
+            fr_fr: La clé de rôle de service pour le stockage
+        - container: DATABASE_URL
+          description:
+            en_us: The database URL for Storage
+            fr_fr: L'URL de la base de données pour le stockage
+      volumes:
+        - container: /var/lib/storage
+          description:
+            en_us: "Container Path: /var/lib/storage"
 
   # #############################################################################
   # # Imgproxy (to transform images)
