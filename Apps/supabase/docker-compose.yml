@@ -161,750 +161,750 @@ services:
             en_us: "Container Port: 3000"
             fr_fr: "Port du conteneur: 3000"
 
-  #############################################################################
-  # DB internal (Supabase/Postgres)
-  #############################################################################
-  db:
-    container_name: supabase-db
-    image: supabase/postgres:15.8.1.048
-    restart: unless-stopped
-    volumes:
-      - /DATA/AppData/$AppID/volumes/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
-      - /DATA/AppData/$AppID/volumes/db/webhooks.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z
-      - /DATA/AppData/$AppID/volumes/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
-      - /DATA/AppData/$AppID/volumes/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z
-      - /DATA/AppData/$AppID/volumes/db/data:/var/lib/postgresql/data:Z
-      - /DATA/AppData/$AppID/volumes/db/_supabase.sql:/docker-entrypoint-initdb.d/migrations/97-_supabase.sql:Z
-      - /DATA/AppData/$AppID/volumes/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
-      - /DATA/AppData/$AppID/volumes/db/pooler.sql:/docker-entrypoint-initdb.d/migrations/99-pooler.sql:Z
-      - /DATA/AppData/$AppID/volumes/db/postgresql-custom:/etc/postgresql-custom:Z
+  # #############################################################################
+  # # DB internal (Supabase/Postgres)
+  # #############################################################################
+  # db:
+  #   container_name: supabase-db
+  #   image: supabase/postgres:15.8.1.048
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /DATA/AppData/$AppID/volumes/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
+  #     - /DATA/AppData/$AppID/volumes/db/webhooks.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z
+  #     - /DATA/AppData/$AppID/volumes/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
+  #     - /DATA/AppData/$AppID/volumes/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z
+  #     - /DATA/AppData/$AppID/volumes/db/data:/var/lib/postgresql/data:Z
+  #     - /DATA/AppData/$AppID/volumes/db/_supabase.sql:/docker-entrypoint-initdb.d/migrations/97-_supabase.sql:Z
+  #     - /DATA/AppData/$AppID/volumes/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
+  #     - /DATA/AppData/$AppID/volumes/db/pooler.sql:/docker-entrypoint-initdb.d/migrations/99-pooler.sql:Z
+  #     - /DATA/AppData/$AppID/volumes/db/postgresql-custom:/etc/postgresql-custom:Z
 
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    # depends_on:
-    #   vector:
-    #     condition: service_healthy
-    environment:
-      POSTGRES_HOST: /var/run/postgresql
-      PGPORT: 5432
-      POSTGRES_PORT: 5432
-      PGPASSWORD: your-super-secret-and-long-postgres-password
-      POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
-      PGDATABASE: postgres
-      POSTGRES_DB: postgres
-      JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      JWT_EXP: 3600
-    # command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
-    command: ["postgres", "-c", "config_file=/etc/postgresql-custom/postgresql.conf", "-c", "log_min_messages=fatal"]
+  #   healthcheck:
+  #     test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
+  #   # depends_on:
+  #   #   vector:
+  #   #     condition: service_healthy
+  #   environment:
+  #     POSTGRES_HOST: /var/run/postgresql
+  #     PGPORT: 5432
+  #     POSTGRES_PORT: 5432
+  #     PGPASSWORD: your-super-secret-and-long-postgres-password
+  #     POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
+  #     PGDATABASE: postgres
+  #     POSTGRES_DB: postgres
+  #     JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     JWT_EXP: 3600
+  #   # command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
+  #   command: ["postgres", "-c", "config_file=/etc/postgresql-custom/postgresql.conf", "-c", "log_min_messages=fatal"]
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: PGPORT
-          description:
-            en_us: The Postgres port
-            fr_fr: Le port Postgres
-        - container: POSTGRES_PORT
-          description:
-            en_us: The Postgres port
-            fr_fr: Le port Postgres
-        - container: PGPASSWORD
-          description:
-            en_us: The Postgres password
-            fr_fr: Le mot de passe Postgres
-        - container: POSTGRES_PASSWORD
-          description:
-            en_us: The Postgres password
-            fr_fr: Le mot de passe Postgres
-        - container: PGDATABASE
-          description:
-            en_us: The Postgres database
-            fr_fr: La base de données Postgres
-        - container: POSTGRES_DB
-          description:
-            en_us: The Postgres database
-            fr_fr: La base de données Postgres
-        - container: JWT_SECRET
-          description:
-            en_us: The JWT secret
-            fr_fr: Le secret JWT
-        - container: JWT_EXP
-          description:
-            en_us: The JWT expiry
-            fr_fr: L'expiration JWT
-      volumes:
-        - container: /var/lib/postgresql/data
-          description:
-            en_us: "Container Path: /var/lib/postgresql/data"
-        - container: /etc/postgresql-custom
-          description:
-            en_us: "Container Path: /etc/postgresql-custom"
-      ports:
-        - container: "5432"
-          description:
-            en_us: "Container Port: 5432"
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: PGPORT
+  #         description:
+  #           en_us: The Postgres port
+  #           fr_fr: Le port Postgres
+  #       - container: POSTGRES_PORT
+  #         description:
+  #           en_us: The Postgres port
+  #           fr_fr: Le port Postgres
+  #       - container: PGPASSWORD
+  #         description:
+  #           en_us: The Postgres password
+  #           fr_fr: Le mot de passe Postgres
+  #       - container: POSTGRES_PASSWORD
+  #         description:
+  #           en_us: The Postgres password
+  #           fr_fr: Le mot de passe Postgres
+  #       - container: PGDATABASE
+  #         description:
+  #           en_us: The Postgres database
+  #           fr_fr: La base de données Postgres
+  #       - container: POSTGRES_DB
+  #         description:
+  #           en_us: The Postgres database
+  #           fr_fr: La base de données Postgres
+  #       - container: JWT_SECRET
+  #         description:
+  #           en_us: The JWT secret
+  #           fr_fr: Le secret JWT
+  #       - container: JWT_EXP
+  #         description:
+  #           en_us: The JWT expiry
+  #           fr_fr: L'expiration JWT
+  #     volumes:
+  #       - container: /var/lib/postgresql/data
+  #         description:
+  #           en_us: "Container Path: /var/lib/postgresql/data"
+  #       - container: /etc/postgresql-custom
+  #         description:
+  #           en_us: "Container Path: /etc/postgresql-custom"
+  #     ports:
+  #       - container: "5432"
+  #         description:
+  #           en_us: "Container Port: 5432"
 
-  #############################################################################
-  # REST (PostgREST)
-  #############################################################################
-  rest:
-    container_name: supabase-rest
-    image: postgrest/postgrest:v12.2.8
-    restart: unless-stopped
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-    #   analytics:
-    #     condition: service_healthy
-    environment:
-      PGRST_DB_URI: postgres://authenticator:your-super-secret-and-long-postgres-password@db:5432/postgres
-      PGRST_DB_SCHEMAS: public,storage,graphql_public
-      PGRST_DB_ANON_ROLE: anon
-      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      PGRST_DB_USE_LEGACY_GUCS: "false"
-      PGRST_APP_SETTINGS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      PGRST_APP_SETTINGS_JWT_EXP: 3600
-    command: ["postgrest"]
+  # #############################################################################
+  # # REST (PostgREST)
+  # #############################################################################
+  # rest:
+  #   container_name: supabase-rest
+  #   image: postgrest/postgrest:v12.2.8
+  #   restart: unless-stopped
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   #   analytics:
+  #   #     condition: service_healthy
+  #   environment:
+  #     PGRST_DB_URI: postgres://authenticator:your-super-secret-and-long-postgres-password@db:5432/postgres
+  #     PGRST_DB_SCHEMAS: public,storage,graphql_public
+  #     PGRST_DB_ANON_ROLE: anon
+  #     PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     PGRST_DB_USE_LEGACY_GUCS: "false"
+  #     PGRST_APP_SETTINGS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     PGRST_APP_SETTINGS_JWT_EXP: 3600
+  #   command: ["postgrest"]
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: PGRST_DB_URI
-          description:
-            en_us: The database URI for PostgREST
-            fr_fr: L'URI de la base de données pour PostgREST
-        - container: PGRST_DB_SCHEMAS
-          description:
-            en_us: The database schemas for PostgREST
-            fr_fr: Les schémas de base de données pour PostgREST
-        - container: PGRST_JWT_SECRET
-          description:
-            en_us: The JWT secret for PostgREST
-            fr_fr: Le secret JWT pour PostgREST
-        - container: PGRST_APP_SETTINGS_JWT_SECRET
-          description:
-            en_us: The JWT secret for PostgREST app settings
-            fr_fr: Le secret JWT pour les paramètres de l'application PostgREST
-        - container: PGRST_APP_SETTINGS_JWT_EXP
-          description:
-            en_us: The JWT expiry for PostgREST app settings
-            fr_fr: L'expiration JWT pour les paramètres de l'application PostgREST
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: PGRST_DB_URI
+  #         description:
+  #           en_us: The database URI for PostgREST
+  #           fr_fr: L'URI de la base de données pour PostgREST
+  #       - container: PGRST_DB_SCHEMAS
+  #         description:
+  #           en_us: The database schemas for PostgREST
+  #           fr_fr: Les schémas de base de données pour PostgREST
+  #       - container: PGRST_JWT_SECRET
+  #         description:
+  #           en_us: The JWT secret for PostgREST
+  #           fr_fr: Le secret JWT pour PostgREST
+  #       - container: PGRST_APP_SETTINGS_JWT_SECRET
+  #         description:
+  #           en_us: The JWT secret for PostgREST app settings
+  #           fr_fr: Le secret JWT pour les paramètres de l'application PostgREST
+  #       - container: PGRST_APP_SETTINGS_JWT_EXP
+  #         description:
+  #           en_us: The JWT expiry for PostgREST app settings
+  #           fr_fr: L'expiration JWT pour les paramètres de l'application PostgREST
 
-  #############################################################################
-  # Storage
-  #############################################################################
-  storage:
-    container_name: supabase-storage
-    image: supabase/storage-api:v1.19.1
-    restart: unless-stopped
-    volumes:
-      - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/status"]
-      timeout: 5s
-      interval: 5s
-      retries: 3
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-    #   rest:
-    #     condition: service_started
-    #   imgproxy:
-    #     condition: service_started
-    environment:
-      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
-      SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
-      POSTGREST_URL: http://rest:3000
-      DATABASE_URL: postgres://supabase_storage_admin:your-super-secret-and-long-postgres-password@db:5432/postgres
-      FILE_SIZE_LIMIT: 52428800
-      STORAGE_BACKEND: file
-      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
-      TENANT_ID: stub
-      GLOBAL_S3_BUCKET: "stub"
-      ENABLE_IMAGE_TRANSFORMATION: "true"
-      IMGPROXY_URL: http://imgproxy:5001
+  # #############################################################################
+  # # Storage
+  # #############################################################################
+  # storage:
+  #   container_name: supabase-storage
+  #   image: supabase/storage-api:v1.19.1
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/status"]
+  #     timeout: 5s
+  #     interval: 5s
+  #     retries: 3
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   #   rest:
+  #   #     condition: service_started
+  #   #   imgproxy:
+  #   #     condition: service_started
+  #   environment:
+  #     PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+  #     SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+  #     POSTGREST_URL: http://rest:3000
+  #     DATABASE_URL: postgres://supabase_storage_admin:your-super-secret-and-long-postgres-password@db:5432/postgres
+  #     FILE_SIZE_LIMIT: 52428800
+  #     STORAGE_BACKEND: file
+  #     FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+  #     TENANT_ID: stub
+  #     GLOBAL_S3_BUCKET: "stub"
+  #     ENABLE_IMAGE_TRANSFORMATION: "true"
+  #     IMGPROXY_URL: http://imgproxy:5001
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: PGRST_JWT_SECRET
-          description:
-            en_us: The JWT secret for Storage
-            fr_fr: Le secret JWT pour le stockage
-        - container: ANON_KEY
-          description:
-            en_us: The anonymous key for Storage
-            fr_fr: La clé anonyme pour le stockage
-        - container: SERVICE_KEY
-          description:
-            en_us: The service role key for Storage
-            fr_fr: La clé de rôle de service pour le stockage
-        - container: DATABASE_URL
-          description:
-            en_us: The database URL for Storage
-            fr_fr: L'URL de la base de données pour le stockage
-      volumes:
-        - container: /var/lib/storage
-          description:
-            en_us: "Container Path: /var/lib/storage"
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: PGRST_JWT_SECRET
+  #         description:
+  #           en_us: The JWT secret for Storage
+  #           fr_fr: Le secret JWT pour le stockage
+  #       - container: ANON_KEY
+  #         description:
+  #           en_us: The anonymous key for Storage
+  #           fr_fr: La clé anonyme pour le stockage
+  #       - container: SERVICE_KEY
+  #         description:
+  #           en_us: The service role key for Storage
+  #           fr_fr: La clé de rôle de service pour le stockage
+  #       - container: DATABASE_URL
+  #         description:
+  #           en_us: The database URL for Storage
+  #           fr_fr: L'URL de la base de données pour le stockage
+  #     volumes:
+  #       - container: /var/lib/storage
+  #         description:
+  #           en_us: "Container Path: /var/lib/storage"
 
-  #############################################################################
-  # Imgproxy (to transform images)
-  #############################################################################
-  imgproxy:
-    container_name: supabase-imgproxy
-    image: darthsim/imgproxy:v3.27.2
-    restart: unless-stopped
-    volumes:
-      - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
-    healthcheck:
-      test: ["CMD", "imgproxy", "health"]
-      timeout: 5s
-      interval: 5s
-      retries: 3
-    environment:
-      IMGPROXY_BIND: ":5001"
-      IMGPROXY_LOCAL_FILESYSTEM_ROOT: "/var/lib/storage"
-      IMGPROXY_USE_ETAG: "true"
-      IMGPROXY_ENABLE_WEBP_DETECTION: "true"
+  # #############################################################################
+  # # Imgproxy (to transform images)
+  # #############################################################################
+  # imgproxy:
+  #   container_name: supabase-imgproxy
+  #   image: darthsim/imgproxy:v3.27.2
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
+  #   healthcheck:
+  #     test: ["CMD", "imgproxy", "health"]
+  #     timeout: 5s
+  #     interval: 5s
+  #     retries: 3
+  #   environment:
+  #     IMGPROXY_BIND: ":5001"
+  #     IMGPROXY_LOCAL_FILESYSTEM_ROOT: "/var/lib/storage"
+  #     IMGPROXY_USE_ETAG: "true"
+  #     IMGPROXY_ENABLE_WEBP_DETECTION: "true"
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: IMGPROXY_ENABLE_WEBP_DETECTION
-          description:
-            en_us: Enable WebP detection for Imgproxy (true or false)
-            fr_fr: Activer la détection WebP pour Imgproxy (true ou false)
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: IMGPROXY_ENABLE_WEBP_DETECTION
+  #         description:
+  #           en_us: Enable WebP detection for Imgproxy (true or false)
+  #           fr_fr: Activer la détection WebP pour Imgproxy (true ou false)
 
-  #############################################################################
-  # Meta (Postgres Meta)
-  #############################################################################
-  meta:
-    container_name: supabase-meta
-    image: supabase/postgres-meta:v0.86.1
-    restart: unless-stopped
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-    #   analytics:
-    #     condition: service_healthy
-    environment:
-      PG_META_PORT: 8080
-      PG_META_DB_HOST: db
-      PG_META_DB_PORT: 5432
-      PG_META_DB_NAME: postgres
-      PG_META_DB_USER: supabase_admin
-      PG_META_DB_PASSWORD: your-super-secret-and-long-postgres-password
+  # #############################################################################
+  # # Meta (Postgres Meta)
+  # #############################################################################
+  # meta:
+  #   container_name: supabase-meta
+  #   image: supabase/postgres-meta:v0.86.1
+  #   restart: unless-stopped
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   #   analytics:
+  #   #     condition: service_healthy
+  #   environment:
+  #     PG_META_PORT: 8080
+  #     PG_META_DB_HOST: db
+  #     PG_META_DB_PORT: 5432
+  #     PG_META_DB_NAME: postgres
+  #     PG_META_DB_USER: supabase_admin
+  #     PG_META_DB_PASSWORD: your-super-secret-and-long-postgres-password
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: PG_META_DB_HOST
-          description:
-            en_us: The database host for Postgres Meta
-            fr_fr: L'hôte de la base de données pour Postgres Meta
-        - container: PG_META_DB_PORT
-          description:
-            en_us: The database port for Postgres Meta
-            fr_fr: Le port de la base de données pour Postgres Meta
-        - container: PG_META_DB_NAME
-          description:
-            en_us: The database name for Postgres Meta
-            fr_fr: Le nom de la base de données pour Postgres Meta
-        - container: PG_META_DB_PASSWORD
-          description:
-            en_us: The database password for Postgres Meta
-            fr_fr: Le mot de passe de la base de données pour Postgres Meta
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: PG_META_DB_HOST
+  #         description:
+  #           en_us: The database host for Postgres Meta
+  #           fr_fr: L'hôte de la base de données pour Postgres Meta
+  #       - container: PG_META_DB_PORT
+  #         description:
+  #           en_us: The database port for Postgres Meta
+  #           fr_fr: Le port de la base de données pour Postgres Meta
+  #       - container: PG_META_DB_NAME
+  #         description:
+  #           en_us: The database name for Postgres Meta
+  #           fr_fr: Le nom de la base de données pour Postgres Meta
+  #       - container: PG_META_DB_PASSWORD
+  #         description:
+  #           en_us: The database password for Postgres Meta
+  #           fr_fr: Le mot de passe de la base de données pour Postgres Meta
 
-  #############################################################################
-  # Realtime
-  #############################################################################
-  realtime:
-    container_name: realtime-dev.supabase-realtime
-    image: supabase/realtime:v2.34.40
-    restart: unless-stopped
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-    #   analytics:
-    #     condition: service_healthy
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-sSfL",
-          "--head",
-          "-o",
-          "/dev/null",
-          "-H",
-          "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
-          "http://localhost:4000/api/tenants/realtime-dev/health",
-        ]
-      timeout: 5s
-      interval: 5s
-      retries: 3
-    environment:
-      PORT: 4000
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: supabase_admin
-      DB_PASSWORD: your-super-secret-and-long-postgres-password
-      DB_NAME: postgres
-      DB_AFTER_CONNECT_QUERY: "SET search_path TO _realtime"
-      DB_ENC_KEY: supabaserealtime
-      API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
-      ERL_AFLAGS: -proto_dist inet_tcp
-      DNS_NODES: "''"
-      RLIMIT_NOFILE: "10000"
-      APP_NAME: realtime
-      SEED_SELF_HOST: "true"
-      RUN_JANITOR: "true"
+  # #############################################################################
+  # # Realtime
+  # #############################################################################
+  # realtime:
+  #   container_name: realtime-dev.supabase-realtime
+  #   image: supabase/realtime:v2.34.40
+  #   restart: unless-stopped
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   #   analytics:
+  #   #     condition: service_healthy
+  #   healthcheck:
+  #     test:
+  #       [
+  #         "CMD",
+  #         "curl",
+  #         "-sSfL",
+  #         "--head",
+  #         "-o",
+  #         "/dev/null",
+  #         "-H",
+  #         "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
+  #         "http://localhost:4000/api/tenants/realtime-dev/health",
+  #       ]
+  #     timeout: 5s
+  #     interval: 5s
+  #     retries: 3
+  #   environment:
+  #     PORT: 4000
+  #     DB_HOST: db
+  #     DB_PORT: 5432
+  #     DB_USER: supabase_admin
+  #     DB_PASSWORD: your-super-secret-and-long-postgres-password
+  #     DB_NAME: postgres
+  #     DB_AFTER_CONNECT_QUERY: "SET search_path TO _realtime"
+  #     DB_ENC_KEY: supabaserealtime
+  #     API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+  #     ERL_AFLAGS: -proto_dist inet_tcp
+  #     DNS_NODES: "''"
+  #     RLIMIT_NOFILE: "10000"
+  #     APP_NAME: realtime
+  #     SEED_SELF_HOST: "true"
+  #     RUN_JANITOR: "true"
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: DB_HOST
-          description:
-            en_us: The database host for Realtime
-            fr_fr: L'hôte de la base de données pour Realtime
-        - container: DB_PORT
-          description:
-            en_us: The database port for Realtime
-            fr_fr: Le port de la base de données pour Realtime
-        - container: DB_PASSWORD
-          description:
-            en_us: The database password for Realtime
-            fr_fr: Le mot de passe de la base de données pour Realtime
-        - container: DB_NAME
-          description:
-            en_us: The database name for Realtime
-            fr_fr: Le nom de la base de données pour Realtime
-        - container: API_JWT_SECRET
-          description:
-            en_us: The JWT secret for Realtime
-            fr_fr: Le secret JWT pour Realtime
-        - container: SECRET_KEY_BASE
-          description:
-            en_us: The secret key base for Realtime
-            fr_fr: La base de clés secrètes pour Realtime
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: DB_HOST
+  #         description:
+  #           en_us: The database host for Realtime
+  #           fr_fr: L'hôte de la base de données pour Realtime
+  #       - container: DB_PORT
+  #         description:
+  #           en_us: The database port for Realtime
+  #           fr_fr: Le port de la base de données pour Realtime
+  #       - container: DB_PASSWORD
+  #         description:
+  #           en_us: The database password for Realtime
+  #           fr_fr: Le mot de passe de la base de données pour Realtime
+  #       - container: DB_NAME
+  #         description:
+  #           en_us: The database name for Realtime
+  #           fr_fr: Le nom de la base de données pour Realtime
+  #       - container: API_JWT_SECRET
+  #         description:
+  #           en_us: The JWT secret for Realtime
+  #           fr_fr: Le secret JWT pour Realtime
+  #       - container: SECRET_KEY_BASE
+  #         description:
+  #           en_us: The secret key base for Realtime
+  #           fr_fr: La base de clés secrètes pour Realtime
 
-  #############################################################################
-  # Edge Functions
-  #############################################################################
-  functions:
-    container_name: supabase-edge-functions
-    image: supabase/edge-runtime:v1.67.2
-    restart: unless-stopped
-    volumes:
-      - /DATA/AppData/$AppID/volumes/functions:/home/deno/functions:Z
-    # depends_on:
-    #   analytics:
-    #     condition: service_healthy
-    environment:
-      SUPABASE_URL: http://kong:8000
-      JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
-      SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
-      SUPABASE_DB_URL: postgresql://postgres:your-super-secret-and-long-postgres-password@db:5432/postgres
-      VERIFY_JWT: "false"
-    command: ["start", "--main-service", "/home/deno/functions/main"]
+  # #############################################################################
+  # # Edge Functions
+  # #############################################################################
+  # functions:
+  #   container_name: supabase-edge-functions
+  #   image: supabase/edge-runtime:v1.67.2
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /DATA/AppData/$AppID/volumes/functions:/home/deno/functions:Z
+  #   # depends_on:
+  #   #   analytics:
+  #   #     condition: service_healthy
+  #   environment:
+  #     SUPABASE_URL: http://kong:8000
+  #     JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+  #     SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+  #     SUPABASE_DB_URL: postgresql://postgres:your-super-secret-and-long-postgres-password@db:5432/postgres
+  #     VERIFY_JWT: "false"
+  #   command: ["start", "--main-service", "/home/deno/functions/main"]
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: SUPABASE_URL
-          description:
-            en_us: The URL for Supabase
-            fr_fr: L'URL pour Supabase
-        - container: JWT_SECRET
-          description:
-            en_us: The JWT secret for Edge Functions
-            fr_fr: Le secret JWT pour les fonctions Edge
-        - container: SUPABASE_ANON_KEY
-          description:
-            en_us: The anonymous key for Edge Functions
-            fr_fr: La clé anonyme pour les fonctions Edge
-        - container: SUPABASE_SERVICE_ROLE_KEY
-          description:
-            en_us: The service role key for Edge Functions
-            fr_fr: La clé de rôle de service pour les fonctions Edge
-        - container: SUPABASE_DB_URL
-          description:
-            en_us: The database URL for Edge Functions
-            fr_fr: L'URL de la base de données pour les fonctions Edge
-        - container: VERIFY_JWT
-          description:
-            en_us: Verify JWT for Edge Functions (true or false)
-            fr_fr: Vérifier JWT pour les fonctions Edge (true ou false)
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: SUPABASE_URL
+  #         description:
+  #           en_us: The URL for Supabase
+  #           fr_fr: L'URL pour Supabase
+  #       - container: JWT_SECRET
+  #         description:
+  #           en_us: The JWT secret for Edge Functions
+  #           fr_fr: Le secret JWT pour les fonctions Edge
+  #       - container: SUPABASE_ANON_KEY
+  #         description:
+  #           en_us: The anonymous key for Edge Functions
+  #           fr_fr: La clé anonyme pour les fonctions Edge
+  #       - container: SUPABASE_SERVICE_ROLE_KEY
+  #         description:
+  #           en_us: The service role key for Edge Functions
+  #           fr_fr: La clé de rôle de service pour les fonctions Edge
+  #       - container: SUPABASE_DB_URL
+  #         description:
+  #           en_us: The database URL for Edge Functions
+  #           fr_fr: L'URL de la base de données pour les fonctions Edge
+  #       - container: VERIFY_JWT
+  #         description:
+  #           en_us: Verify JWT for Edge Functions (true or false)
+  #           fr_fr: Vérifier JWT pour les fonctions Edge (true ou false)
 
-  #############################################################################
-  # Auth (GoTrue)
-  #############################################################################
-  auth:
-    container_name: supabase-auth
-    image: supabase/gotrue:v2.169.0
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
-      timeout: 5s
-      interval: 5s
-      retries: 3
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-    #   analytics:
-    #     condition: service_healthy
-    environment:
-      GOTRUE_API_HOST: "0.0.0.0"
-      GOTRUE_API_PORT: 9999
-      API_EXTERNAL_URL: http://localhost:8000
+  # #############################################################################
+  # # Auth (GoTrue)
+  # #############################################################################
+  # auth:
+  #   container_name: supabase-auth
+  #   image: supabase/gotrue:v2.169.0
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
+  #     timeout: 5s
+  #     interval: 5s
+  #     retries: 3
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   #   analytics:
+  #   #     condition: service_healthy
+  #   environment:
+  #     GOTRUE_API_HOST: "0.0.0.0"
+  #     GOTRUE_API_PORT: 9999
+  #     API_EXTERNAL_URL: http://localhost:8000
 
-      GOTRUE_DB_DRIVER: postgres
-      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:your-super-secret-and-long-postgres-password@db:5432/postgres
+  #     GOTRUE_DB_DRIVER: postgres
+  #     GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:your-super-secret-and-long-postgres-password@db:5432/postgres
 
-      GOTRUE_SITE_URL: http://localhost:3000
-      GOTRUE_URI_ALLOW_LIST: ""
-      GOTRUE_DISABLE_SIGNUP: "false"
+  #     GOTRUE_SITE_URL: http://localhost:3000
+  #     GOTRUE_URI_ALLOW_LIST: ""
+  #     GOTRUE_DISABLE_SIGNUP: "false"
 
-      GOTRUE_JWT_ADMIN_ROLES: service_role
-      GOTRUE_JWT_AUD: authenticated
-      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
-      GOTRUE_JWT_EXP: 3600
-      GOTRUE_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     GOTRUE_JWT_ADMIN_ROLES: service_role
+  #     GOTRUE_JWT_AUD: authenticated
+  #     GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+  #     GOTRUE_JWT_EXP: 3600
+  #     GOTRUE_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
 
-      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
-      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: "false"
-      GOTRUE_MAILER_AUTOCONFIRM: "false"
+  #     GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+  #     GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: "false"
+  #     GOTRUE_MAILER_AUTOCONFIRM: "false"
 
-      GOTRUE_SMTP_MAX_FREQUENCY: 1s
-      GOTRUE_SMTP_ADMIN_EMAIL: admin@example.com
-      GOTRUE_SMTP_HOST: supabase-mail
-      GOTRUE_SMTP_PORT: 2500
-      GOTRUE_SMTP_USER: fake_mail_user
-      GOTRUE_SMTP_PASS: fake_mail_password
-      GOTRUE_SMTP_SENDER_NAME: fake_sender
-      GOTRUE_MAILER_URLPATHS_INVITE: invite@example.com
-      GOTRUE_MAILER_URLPATHS_CONFIRMATION: confirmation@example.com
-      GOTRUE_MAILER_URLPATHS_RECOVERY: recovery@example.com
-      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: change@example.com
+  #     GOTRUE_SMTP_MAX_FREQUENCY: 1s
+  #     GOTRUE_SMTP_ADMIN_EMAIL: admin@example.com
+  #     GOTRUE_SMTP_HOST: supabase-mail
+  #     GOTRUE_SMTP_PORT: 2500
+  #     GOTRUE_SMTP_USER: fake_mail_user
+  #     GOTRUE_SMTP_PASS: fake_mail_password
+  #     GOTRUE_SMTP_SENDER_NAME: fake_sender
+  #     GOTRUE_MAILER_URLPATHS_INVITE: invite@example.com
+  #     GOTRUE_MAILER_URLPATHS_CONFIRMATION: confirmation@example.com
+  #     GOTRUE_MAILER_URLPATHS_RECOVERY: recovery@example.com
+  #     GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: change@example.com
 
-      GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
-      GOTRUE_SMS_AUTOCONFIRM: "false"
+  #     GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
+  #     GOTRUE_SMS_AUTOCONFIRM: "false"
 
-      GOTRUE_EXTERNAL_GOOGLE_ENABLED: "true"
-      GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: ""
-      GOTRUE_EXTERNAL_GOOGLE_SECRET: ""
-      GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: ""
-      GOTRUE_EXTERNAL_GOOGLE_URL: ""
+  #     GOTRUE_EXTERNAL_GOOGLE_ENABLED: "true"
+  #     GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: ""
+  #     GOTRUE_EXTERNAL_GOOGLE_SECRET: ""
+  #     GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: ""
+  #     GOTRUE_EXTERNAL_GOOGLE_URL: ""
 
-    x-casaos: # CasaOS specific configuration
-      envs:
-        - container: API_EXTERNAL_URL
-          description:
-            en_us: The external URL for the API
-            fr_fr: L'URL externe pour l'API
-        - container: GOTRUE_DB_DATABASE_URL
-          description:
-            en_us: The database URL for GoTrue
-            fr_fr: L'URL de la base de données pour GoTrue
-        - container: GOTRUE_SITE_URL
-          description:
-            en_us: The site URL for GoTrue
-            fr_fr: L'URL du site pour GoTrue
-        - container: GOTRUE_URI_ALLOW_LIST
-          description:
-            en_us: The URI allow list for GoTrue
-            fr_fr: La liste d'autorisation d'URI pour GoTrue
-        - container: GOTRUE_DISABLE_SIGNUP
-          description:
-            en_us: Disable signup for GoTrue (true or false)
-            fr_fr: Désactiver l'inscription pour GoTrue (true ou false)
-        - container: GOTRUE_JWT_EXP
-          description:
-            en_us: The JWT expiry for GoTrue
-            fr_fr: L'expiration JWT pour GoTrue
-        - container: GOTRUE_JWT_SECRET
-          description:
-            en_us: The JWT secret
-            fr_fr: Le secret JWT
+  #   x-casaos: # CasaOS specific configuration
+  #     envs:
+  #       - container: API_EXTERNAL_URL
+  #         description:
+  #           en_us: The external URL for the API
+  #           fr_fr: L'URL externe pour l'API
+  #       - container: GOTRUE_DB_DATABASE_URL
+  #         description:
+  #           en_us: The database URL for GoTrue
+  #           fr_fr: L'URL de la base de données pour GoTrue
+  #       - container: GOTRUE_SITE_URL
+  #         description:
+  #           en_us: The site URL for GoTrue
+  #           fr_fr: L'URL du site pour GoTrue
+  #       - container: GOTRUE_URI_ALLOW_LIST
+  #         description:
+  #           en_us: The URI allow list for GoTrue
+  #           fr_fr: La liste d'autorisation d'URI pour GoTrue
+  #       - container: GOTRUE_DISABLE_SIGNUP
+  #         description:
+  #           en_us: Disable signup for GoTrue (true or false)
+  #           fr_fr: Désactiver l'inscription pour GoTrue (true ou false)
+  #       - container: GOTRUE_JWT_EXP
+  #         description:
+  #           en_us: The JWT expiry for GoTrue
+  #           fr_fr: L'expiration JWT pour GoTrue
+  #       - container: GOTRUE_JWT_SECRET
+  #         description:
+  #           en_us: The JWT secret
+  #           fr_fr: Le secret JWT
 
-        - container: GOTRUE_EXTERNAL_EMAIL_ENABLED
-          description:
-            en_us: Enable external email for GoTrue (true or false)
-            fr_fr: Activer l'e-mail externe pour GoTrue (true ou false)
-        - container: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
-          description:
-            en_us: Enable external anonymous users for GoTrue (true or false)
-            fr_fr: Activer les utilisateurs anonymes externes pour GoTrue (true ou false)
-        - container: GOTRUE_MAILER_AUTOCONFIRM
-          description:
-            en_us: Enable mailer autoconfirm for GoTrue (true or false)
-            fr_fr: Activer le mailer autoconfirm pour GoTrue (true ou false)
+  #       - container: GOTRUE_EXTERNAL_EMAIL_ENABLED
+  #         description:
+  #           en_us: Enable external email for GoTrue (true or false)
+  #           fr_fr: Activer l'e-mail externe pour GoTrue (true ou false)
+  #       - container: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
+  #         description:
+  #           en_us: Enable external anonymous users for GoTrue (true or false)
+  #           fr_fr: Activer les utilisateurs anonymes externes pour GoTrue (true ou false)
+  #       - container: GOTRUE_MAILER_AUTOCONFIRM
+  #         description:
+  #           en_us: Enable mailer autoconfirm for GoTrue (true or false)
+  #           fr_fr: Activer le mailer autoconfirm pour GoTrue (true ou false)
 
-        - container: GOTRUE_SMTP_MAX_FREQUENCY
-          description:
-            en_us: The SMTP max frequency for GoTrue
-            fr_fr: La fréquence maximale SMTP pour GoTrue
-        - container: GOTRUE_SMTP_ADMIN_EMAIL
-          description:
-            en_us: The SMTP admin email for GoTrue
-            fr_fr: L'e-mail administrateur SMTP pour GoTrue
-        - container: GOTRUE_SMTP_HOST
-          description:
-            en_us: The SMTP host for GoTrue
-            fr_fr: L'hôte SMTP pour GoTrue
-        - container: GOTRUE_SMTP_PORT
-          description:
-            en_us: The SMTP port for GoTrue
-            fr_fr: Le port SMTP pour GoTrue
-        - container: GOTRUE_SMTP_USER
-          description:
-            en_us: The SMTP user for GoTrue
-            fr_fr: L'utilisateur SMTP pour GoTrue
-        - container: GOTRUE_SMTP_PASS
-          description:
-            en_us: The SMTP password for GoTrue
-            fr_fr: Le mot de passe SMTP pour GoTrue
-        - container: GOTRUE_SMTP_SENDER_NAME
-          description:
-            en_us: The SMTP sender name for GoTrue
-            fr_fr: Le nom de l'expéditeur SMTP pour GoTrue
-        - container: GOTRUE_MAILER_URLPATHS_INVITE
-          description:
-            en_us: The mailer URL paths for invite for GoTrue
-            fr_fr: Les chemins d'URL du mailer pour inviter pour GoTrue
-        - container: GOTRUE_MAILER_URLPATHS_CONFIRMATION
-          description:
-            en_us: The mailer URL paths for confirmation for GoTrue
-            fr_fr: Les chemins d'URL du mailer pour la confirmation pour GoTrue
-        - container: GOTRUE_MAILER_URLPATHS_RECOVERY
-          description:
-            en_us: The mailer URL paths for recovery for GoTrue
-            fr_fr: Les chemins d'URL du mailer pour la récupération pour GoTrue
-        - container: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
-          description:
-            en_us: The mailer URL paths for email change for GoTrue
-            fr_fr: Les chemins d'URL du mailer pour le changement d'e-mail pour GoTrue
+  #       - container: GOTRUE_SMTP_MAX_FREQUENCY
+  #         description:
+  #           en_us: The SMTP max frequency for GoTrue
+  #           fr_fr: La fréquence maximale SMTP pour GoTrue
+  #       - container: GOTRUE_SMTP_ADMIN_EMAIL
+  #         description:
+  #           en_us: The SMTP admin email for GoTrue
+  #           fr_fr: L'e-mail administrateur SMTP pour GoTrue
+  #       - container: GOTRUE_SMTP_HOST
+  #         description:
+  #           en_us: The SMTP host for GoTrue
+  #           fr_fr: L'hôte SMTP pour GoTrue
+  #       - container: GOTRUE_SMTP_PORT
+  #         description:
+  #           en_us: The SMTP port for GoTrue
+  #           fr_fr: Le port SMTP pour GoTrue
+  #       - container: GOTRUE_SMTP_USER
+  #         description:
+  #           en_us: The SMTP user for GoTrue
+  #           fr_fr: L'utilisateur SMTP pour GoTrue
+  #       - container: GOTRUE_SMTP_PASS
+  #         description:
+  #           en_us: The SMTP password for GoTrue
+  #           fr_fr: Le mot de passe SMTP pour GoTrue
+  #       - container: GOTRUE_SMTP_SENDER_NAME
+  #         description:
+  #           en_us: The SMTP sender name for GoTrue
+  #           fr_fr: Le nom de l'expéditeur SMTP pour GoTrue
+  #       - container: GOTRUE_MAILER_URLPATHS_INVITE
+  #         description:
+  #           en_us: The mailer URL paths for invite for GoTrue
+  #           fr_fr: Les chemins d'URL du mailer pour inviter pour GoTrue
+  #       - container: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+  #         description:
+  #           en_us: The mailer URL paths for confirmation for GoTrue
+  #           fr_fr: Les chemins d'URL du mailer pour la confirmation pour GoTrue
+  #       - container: GOTRUE_MAILER_URLPATHS_RECOVERY
+  #         description:
+  #           en_us: The mailer URL paths for recovery for GoTrue
+  #           fr_fr: Les chemins d'URL du mailer pour la récupération pour GoTrue
+  #       - container: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+  #         description:
+  #           en_us: The mailer URL paths for email change for GoTrue
+  #           fr_fr: Les chemins d'URL du mailer pour le changement d'e-mail pour GoTrue
 
-        - container: GOTRUE_EXTERNAL_PHONE_ENABLED
-          description:
-            en_us: Enable external phone for GoTrue (true or false)
-            fr_fr: Activer le téléphone externe pour GoTrue (true ou false)
-        - container: GOTRUE_SMS_AUTOCONFIRM
-          description:
-            en_us: Enable SMS autoconfirm for GoTrue (true or false)
-            fr_fr: Activer le SMS autoconfirm pour GoTrue (true ou false)
+  #       - container: GOTRUE_EXTERNAL_PHONE_ENABLED
+  #         description:
+  #           en_us: Enable external phone for GoTrue (true or false)
+  #           fr_fr: Activer le téléphone externe pour GoTrue (true ou false)
+  #       - container: GOTRUE_SMS_AUTOCONFIRM
+  #         description:
+  #           en_us: Enable SMS autoconfirm for GoTrue (true or false)
+  #           fr_fr: Activer le SMS autoconfirm pour GoTrue (true ou false)
 
-        - container: GOTRUE_EXTERNAL_GOOGLE_ENABLED
-          description:
-            en_us: Enable external Google for GoTrue (true or false)
-            fr_fr: Activer Google externe pour GoTrue (true ou false)
-        - container: GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID
-          description:
-            en_us: The external Google client ID for GoTrue
-            fr_fr: L'identifiant client Google externe pour GoTrue
-        - container: GOTRUE_EXTERNAL_GOOGLE_SECRET
-          description:
-            en_us: The external Google secret for GoTrue
-            fr_fr: Le secret Google externe pour GoTrue
-        - container: GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI
-          description:
-            en_us: The URI Google will redirect to with the code and state values.
-            fr_fr: L'URI vers laquelle Google redirigera avec les valeurs de code et d'état.
+  #       - container: GOTRUE_EXTERNAL_GOOGLE_ENABLED
+  #         description:
+  #           en_us: Enable external Google for GoTrue (true or false)
+  #           fr_fr: Activer Google externe pour GoTrue (true ou false)
+  #       - container: GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID
+  #         description:
+  #           en_us: The external Google client ID for GoTrue
+  #           fr_fr: L'identifiant client Google externe pour GoTrue
+  #       - container: GOTRUE_EXTERNAL_GOOGLE_SECRET
+  #         description:
+  #           en_us: The external Google secret for GoTrue
+  #           fr_fr: Le secret Google externe pour GoTrue
+  #       - container: GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI
+  #         description:
+  #           en_us: The URI Google will redirect to with the code and state values.
+  #           fr_fr: L'URI vers laquelle Google redirigera avec les valeurs de code et d'état.
 
-  #############################################################################
-  # Vector (log collection for analytics)
-  #############################################################################
-  vector:
-    container_name: supabase-vector
-    image: timberio/vector:latest-alpine
-    restart: unless-stopped
-    volumes:
-      - /DATA/AppData/$AppID/volumes/vector/vector.yml:/etc/vector/vector.yml:ro
-      - ${DOCKER_SOCKET_LOCATION:-/var/run/docker.sock}:/var/run/docker.sock:ro
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9001/health"]
-      timeout: 5s
-      interval: 5s
-      retries: 3
-    environment:
-      LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
-    command: ["--config", "/etc/vector/vector.yml"]
+  # #############################################################################
+  # # Vector (log collection for analytics)
+  # #############################################################################
+  # vector:
+  #   container_name: supabase-vector
+  #   image: timberio/vector:latest-alpine
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /DATA/AppData/$AppID/volumes/vector/vector.yml:/etc/vector/vector.yml:ro
+  #     - ${DOCKER_SOCKET_LOCATION:-/var/run/docker.sock}:/var/run/docker.sock:ro
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9001/health"]
+  #     timeout: 5s
+  #     interval: 5s
+  #     retries: 3
+  #   environment:
+  #     LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
+  #   command: ["--config", "/etc/vector/vector.yml"]
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: LOGFLARE_API_KEY
-          description:
-            en_us: The API key for Vector
-            fr_fr: La clé API pour Vector
-      volumes:
-        - container: /etc/vector/vector.yml
-          description:
-            en_us: "Configuration file for Vector"
-            fr_fr: "Fichier de configuration pour Vector"
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: LOGFLARE_API_KEY
+  #         description:
+  #           en_us: The API key for Vector
+  #           fr_fr: La clé API pour Vector
+  #     volumes:
+  #       - container: /etc/vector/vector.yml
+  #         description:
+  #           en_us: "Configuration file for Vector"
+  #           fr_fr: "Fichier de configuration pour Vector"
 
-  #############################################################################
-  # Analytics (Logflare)
-  #############################################################################
-  analytics:
-    container_name: supabase-analytics
-    image: supabase/logflare:1.12.4
-    restart: unless-stopped
-    ports:
-      - "4000:4000"
-    healthcheck:
-      test: ["CMD", "curl", "http://localhost:4000/health"]
-      timeout: 5s
-      interval: 5s
-      retries: 10
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-    environment:
-      LOGFLARE_NODE_HOST: "127.0.0.1"
-      DB_USERNAME: supabase_admin
-      DB_DATABASE: _supabase
-      DB_HOSTNAME: db
-      DB_PORT: 5432
-      DB_PASSWORD: your-super-secret-and-long-postgres-password
-      DB_SCHEMA: _analytics
-      LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
-      LOGFLARE_SINGLE_TENANT: true
-      LOGFLARE_SUPABASE_MODE: true
-      LOGFLARE_MIN_CLUSTER_SIZE: 1
+  # #############################################################################
+  # # Analytics (Logflare)
+  # #############################################################################
+  # analytics:
+  #   container_name: supabase-analytics
+  #   image: supabase/logflare:1.12.4
+  #   restart: unless-stopped
+  #   ports:
+  #     - "4000:4000"
+  #   healthcheck:
+  #     test: ["CMD", "curl", "http://localhost:4000/health"]
+  #     timeout: 5s
+  #     interval: 5s
+  #     retries: 10
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   environment:
+  #     LOGFLARE_NODE_HOST: "127.0.0.1"
+  #     DB_USERNAME: supabase_admin
+  #     DB_DATABASE: _supabase
+  #     DB_HOSTNAME: db
+  #     DB_PORT: 5432
+  #     DB_PASSWORD: your-super-secret-and-long-postgres-password
+  #     DB_SCHEMA: _analytics
+  #     LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
+  #     LOGFLARE_SINGLE_TENANT: true
+  #     LOGFLARE_SUPABASE_MODE: true
+  #     LOGFLARE_MIN_CLUSTER_SIZE: 1
 
-      POSTGRES_BACKEND_URL: postgresql://supabase_admin:your-super-secret-and-long-postgres-password@db:5432/_supabase
-      POSTGRES_BACKEND_SCHEMA: _analytics
-      LOGFLARE_FEATURE_FLAG_OVERRIDE: "multibackend=true"
+  #     POSTGRES_BACKEND_URL: postgresql://supabase_admin:your-super-secret-and-long-postgres-password@db:5432/_supabase
+  #     POSTGRES_BACKEND_SCHEMA: _analytics
+  #     LOGFLARE_FEATURE_FLAG_OVERRIDE: "multibackend=true"
 
-    x-casaos: # CasaOS specific configuration #################################
-      envs:
-        - container: DB_USERNAME
-          description:
-            en_us: The database username for Logflare
-            fr_fr: Le nom d'utilisateur de la base de données pour Logflare
-        - container: DB_DATABASE
-          description:
-            en_us: The database for Logflare
-            fr_fr: La base de données pour Logflare
-        - container: DB_HOSTNAME
-          description:
-            en_us: The database hostname for Logflare
-            fr_fr: Le nom d'hôte de la base de données pour Logflare
-        - container: DB_PORT
-          description:
-            en_us: The database port for Logflare
-            fr_fr: Le port de la base de données pour Logflare
-        - container: DB_PASSWORD
-          description:
-            en_us: The database password for Logflare
-            fr_fr: Le mot de passe de la base de données pour Logflare
-        - container: LOGFLARE_API_KEY
-          description:
-            en_us: The API key for Logflare
-            fr_fr: La clé API pour Logflare
-      ports:
-        - container: "4000"
-          description:
-            en_us: "Container Port: 4000"
-            fr_fr: "Port du conteneur: 4000"
+  #   x-casaos: # CasaOS specific configuration #################################
+  #     envs:
+  #       - container: DB_USERNAME
+  #         description:
+  #           en_us: The database username for Logflare
+  #           fr_fr: Le nom d'utilisateur de la base de données pour Logflare
+  #       - container: DB_DATABASE
+  #         description:
+  #           en_us: The database for Logflare
+  #           fr_fr: La base de données pour Logflare
+  #       - container: DB_HOSTNAME
+  #         description:
+  #           en_us: The database hostname for Logflare
+  #           fr_fr: Le nom d'hôte de la base de données pour Logflare
+  #       - container: DB_PORT
+  #         description:
+  #           en_us: The database port for Logflare
+  #           fr_fr: Le port de la base de données pour Logflare
+  #       - container: DB_PASSWORD
+  #         description:
+  #           en_us: The database password for Logflare
+  #           fr_fr: Le mot de passe de la base de données pour Logflare
+  #       - container: LOGFLARE_API_KEY
+  #         description:
+  #           en_us: The API key for Logflare
+  #           fr_fr: La clé API pour Logflare
+  #     ports:
+  #       - container: "4000"
+  #         description:
+  #           en_us: "Container Port: 4000"
+  #           fr_fr: "Port du conteneur: 4000"
 
-  #############################################################################
-  # Supavisor (Pooler)
-  #############################################################################
-  supavisor:
-    container_name: supabase-pooler
-    image: supabase/supavisor:2.4.11
-    restart: unless-stopped
-    ports:
-      - 4000:4000
-    volumes:
-      - /DATA/AppData/$AppID/volumes/pooler/pooler.exs:/etc/pooler/pooler.exs:ro
-    healthcheck:
-      test: ["CMD", "curl", "-sSfL", "--head", "-o", "/dev/null", "http://127.0.0.1:4000/api/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
-    #   analytics:
-    #     condition: service_healthy
-    environment:
-      PORT: 4000
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
-      DATABASE_URL: ecto://supabase_admin:your-super-secret-and-long-postgres-password@db:5432/_supabase
-      CLUSTER_POSTGRES: true
-      SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
-      VAULT_ENC_KEY: your-encryption-key-32-chars-min
-      API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      METRICS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-      REGION: local
-      ERL_AFLAGS: -proto_dist inet_tcp
-      POOLER_TENANT_ID: your-tenant-id
-      POOLER_DEFAULT_POOL_SIZE: 20
-      POOLER_MAX_CLIENT_CONN: 100
-      POOLER_POOL_MODE: transaction
-    command: >
-      /bin/sh -c '/app/bin/migrate && /app/bin/supavisor eval "$$(cat /etc/pooler/pooler.exs)" && /app/bin/server'
+  # #############################################################################
+  # # Supavisor (Pooler)
+  # #############################################################################
+  # supavisor:
+  #   container_name: supabase-pooler
+  #   image: supabase/supavisor:2.4.11
+  #   restart: unless-stopped
+  #   ports:
+  #     - 4000:4000
+  #   volumes:
+  #     - /DATA/AppData/$AppID/volumes/pooler/pooler.exs:/etc/pooler/pooler.exs:ro
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-sSfL", "--head", "-o", "/dev/null", "http://127.0.0.1:4000/api/health"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   # depends_on:
+  #   #   db:
+  #   #     condition: service_healthy
+  #   #   analytics:
+  #   #     condition: service_healthy
+  #   environment:
+  #     PORT: 4000
+  #     POSTGRES_PORT: 5432
+  #     POSTGRES_DB: postgres
+  #     POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
+  #     DATABASE_URL: ecto://supabase_admin:your-super-secret-and-long-postgres-password@db:5432/_supabase
+  #     CLUSTER_POSTGRES: true
+  #     SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+  #     VAULT_ENC_KEY: your-encryption-key-32-chars-min
+  #     API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     METRICS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+  #     REGION: local
+  #     ERL_AFLAGS: -proto_dist inet_tcp
+  #     POOLER_TENANT_ID: your-tenant-id
+  #     POOLER_DEFAULT_POOL_SIZE: 20
+  #     POOLER_MAX_CLIENT_CONN: 100
+  #     POOLER_POOL_MODE: transaction
+  #   command: >
+  #     /bin/sh -c '/app/bin/migrate && /app/bin/supavisor eval "$$(cat /etc/pooler/pooler.exs)" && /app/bin/server'
 
-    x-casaos: # CasaOS specific configuration
-      envs:
-        - container: POSTGRES_PORT
-          description:
-            en_us: The Postgres port for Pooler
-            fr_fr: Le port Postgres pour Pooler
-        - container: POSTGRES_DB
-          description:
-            en_us: The Postgres database for Pooler
-            fr_fr: La base de données Postgres pour Pooler
-        - container: POSTGRES_PASSWORD
-          description:
-            en_us: The Postgres password for Pooler
-            fr_fr: Le mot de passe Postgres pour Pooler
-        - container: DATABASE_URL
-          description:
-            en_us: The database URL for Pooler
-            fr_fr: L'URL de la base de données pour Pooler
-        - container: SECRET_KEY_BASE
-          description:
-            en_us: The secret key base for Pooler
-            fr_fr: La base de clés secrètes pour Pooler
-        - container: VAULT_ENC_KEY
-          description:
-            en_us: The Vault encryption key for Pooler
-            fr_fr: La clé de chiffrement Vault pour Pooler
-        - container: API_JWT_SECRET
-          description:
-            en_us: The API JWT secret for Pooler
-            fr_fr: Le secret JWT API pour Pooler
-        - container: METRICS_JWT_SECRET
-          description:
-            en_us: The metrics JWT secret for Pooler
-            fr_fr: Le secret JWT de métriques pour Pooler
-        - container: POOLER_TENANT_ID
-          description:
-            en_us: The tenant ID for Pooler
-            fr_fr: L'ID du locataire pour Pooler
-        - container: POOLER_DEFAULT_POOL_SIZE
-          description:
-            en_us: The default pool size for Pooler
-            fr_fr: La taille de pool par défaut pour Pooler
-        - container: POOLER_MAX_CLIENT_CONN
-          description:
-            en_us: The maximum client connections for Pooler
-            fr_fr: Les connexions client maximales pour Pooler
-      volumes:
-        - container: /etc/pooler/pooler.exs
-          description:
-            en_us: "Configuration file for Pooler"
-            fr_fr: "Fichier de configuration pour Pooler"
-      ports:
-        - container: "4000"
-          description:
-            en_us: "Container Port: 4000"
-            fr_fr: "Port du conteneur: 4000"
+  #   x-casaos: # CasaOS specific configuration
+  #     envs:
+  #       - container: POSTGRES_PORT
+  #         description:
+  #           en_us: The Postgres port for Pooler
+  #           fr_fr: Le port Postgres pour Pooler
+  #       - container: POSTGRES_DB
+  #         description:
+  #           en_us: The Postgres database for Pooler
+  #           fr_fr: La base de données Postgres pour Pooler
+  #       - container: POSTGRES_PASSWORD
+  #         description:
+  #           en_us: The Postgres password for Pooler
+  #           fr_fr: Le mot de passe Postgres pour Pooler
+  #       - container: DATABASE_URL
+  #         description:
+  #           en_us: The database URL for Pooler
+  #           fr_fr: L'URL de la base de données pour Pooler
+  #       - container: SECRET_KEY_BASE
+  #         description:
+  #           en_us: The secret key base for Pooler
+  #           fr_fr: La base de clés secrètes pour Pooler
+  #       - container: VAULT_ENC_KEY
+  #         description:
+  #           en_us: The Vault encryption key for Pooler
+  #           fr_fr: La clé de chiffrement Vault pour Pooler
+  #       - container: API_JWT_SECRET
+  #         description:
+  #           en_us: The API JWT secret for Pooler
+  #           fr_fr: Le secret JWT API pour Pooler
+  #       - container: METRICS_JWT_SECRET
+  #         description:
+  #           en_us: The metrics JWT secret for Pooler
+  #           fr_fr: Le secret JWT de métriques pour Pooler
+  #       - container: POOLER_TENANT_ID
+  #         description:
+  #           en_us: The tenant ID for Pooler
+  #           fr_fr: L'ID du locataire pour Pooler
+  #       - container: POOLER_DEFAULT_POOL_SIZE
+  #         description:
+  #           en_us: The default pool size for Pooler
+  #           fr_fr: La taille de pool par défaut pour Pooler
+  #       - container: POOLER_MAX_CLIENT_CONN
+  #         description:
+  #           en_us: The maximum client connections for Pooler
+  #           fr_fr: Les connexions client maximales pour Pooler
+  #     volumes:
+  #       - container: /etc/pooler/pooler.exs
+  #         description:
+  #           en_us: "Configuration file for Pooler"
+  #           fr_fr: "Fichier de configuration pour Pooler"
+  #     ports:
+  #       - container: "4000"
+  #         description:
+  #           en_us: "Container Port: 4000"
+  #           fr_fr: "Port du conteneur: 4000"
 
 #############################################################################
 # CasaOS Specific Configuration
