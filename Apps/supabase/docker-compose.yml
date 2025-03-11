@@ -488,53 +488,53 @@ services:
             en_us: The secret key base for Realtime
             fr_fr: La base de clés secrètes pour Realtime
 
-  # #############################################################################
-  # # Edge Functions
-  # #############################################################################
-  # functions:
-  #   container_name: supabase-edge-functions
-  #   image: supabase/edge-runtime:v1.67.2
-  #   restart: unless-stopped
-  #   volumes:
-  #     - /DATA/AppData/$AppID/volumes/functions:/home/deno/functions:Z
-  #   # depends_on:
-  #   #   analytics:
-  #   #     condition: service_healthy
-  #   environment:
-  #     SUPABASE_URL: http://kong:8000
-  #     JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-  #     SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
-  #     SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
-  #     SUPABASE_DB_URL: postgresql://postgres:your-super-secret-and-long-postgres-password@db:5432/postgres
-  #     VERIFY_JWT: "false"
-  #   command: ["start", "--main-service", "/home/deno/functions/main"]
+  #############################################################################
+  # Edge Functions
+  #############################################################################
+  functions:
+    container_name: supabase-edge-functions
+    image: supabase/edge-runtime:v1.67.2
+    restart: unless-stopped
+    volumes:
+      - /DATA/AppData/$AppID/volumes/functions:/home/deno/functions:Z
+    # depends_on:
+    #   analytics:
+    #     condition: service_healthy
+    environment:
+      SUPABASE_URL: http://kong:8000
+      JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      SUPABASE_DB_URL: postgresql://postgres:your-super-secret-and-long-postgres-password@db:5432/postgres
+      VERIFY_JWT: "false"
+    command: ["start", "--main-service", "/home/deno/functions/main"]
 
-  #   x-casaos: # CasaOS specific configuration #################################
-  #     envs:
-  #       - container: SUPABASE_URL
-  #         description:
-  #           en_us: The URL for Supabase
-  #           fr_fr: L'URL pour Supabase
-  #       - container: JWT_SECRET
-  #         description:
-  #           en_us: The JWT secret for Edge Functions
-  #           fr_fr: Le secret JWT pour les fonctions Edge
-  #       - container: SUPABASE_ANON_KEY
-  #         description:
-  #           en_us: The anonymous key for Edge Functions
-  #           fr_fr: La clé anonyme pour les fonctions Edge
-  #       - container: SUPABASE_SERVICE_ROLE_KEY
-  #         description:
-  #           en_us: The service role key for Edge Functions
-  #           fr_fr: La clé de rôle de service pour les fonctions Edge
-  #       - container: SUPABASE_DB_URL
-  #         description:
-  #           en_us: The database URL for Edge Functions
-  #           fr_fr: L'URL de la base de données pour les fonctions Edge
-  #       - container: VERIFY_JWT
-  #         description:
-  #           en_us: Verify JWT for Edge Functions (true or false)
-  #           fr_fr: Vérifier JWT pour les fonctions Edge (true ou false)
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: SUPABASE_URL
+          description:
+            en_us: The URL for Supabase
+            fr_fr: L'URL pour Supabase
+        - container: JWT_SECRET
+          description:
+            en_us: The JWT secret for Edge Functions
+            fr_fr: Le secret JWT pour les fonctions Edge
+        - container: SUPABASE_ANON_KEY
+          description:
+            en_us: The anonymous key for Edge Functions
+            fr_fr: La clé anonyme pour les fonctions Edge
+        - container: SUPABASE_SERVICE_ROLE_KEY
+          description:
+            en_us: The service role key for Edge Functions
+            fr_fr: La clé de rôle de service pour les fonctions Edge
+        - container: SUPABASE_DB_URL
+          description:
+            en_us: The database URL for Edge Functions
+            fr_fr: L'URL de la base de données pour les fonctions Edge
+        - container: VERIFY_JWT
+          description:
+            en_us: Verify JWT for Edge Functions (true or false)
+            fr_fr: Vérifier JWT pour les fonctions Edge (true ou false)
 
   # #############################################################################
   # # Auth (GoTrue)
