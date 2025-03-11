@@ -376,117 +376,117 @@ services:
             en_us: Enable WebP detection for Imgproxy (true or false)
             fr_fr: Activer la détection WebP pour Imgproxy (true ou false)
 
-  # #############################################################################
-  # # Meta (Postgres Meta)
-  # #############################################################################
-  # meta:
-  #   container_name: supabase-meta
-  #   image: supabase/postgres-meta:v0.86.1
-  #   restart: unless-stopped
-  #   # depends_on:
-  #   #   db:
-  #   #     condition: service_healthy
-  #   #   analytics:
-  #   #     condition: service_healthy
-  #   environment:
-  #     PG_META_PORT: 8080
-  #     PG_META_DB_HOST: db
-  #     PG_META_DB_PORT: 5432
-  #     PG_META_DB_NAME: postgres
-  #     PG_META_DB_USER: supabase_admin
-  #     PG_META_DB_PASSWORD: your-super-secret-and-long-postgres-password
+  #############################################################################
+  # Meta (Postgres Meta)
+  #############################################################################
+  meta:
+    container_name: supabase-meta
+    image: supabase/postgres-meta:v0.86.1
+    restart: unless-stopped
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   analytics:
+    #     condition: service_healthy
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: db
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: postgres
+      PG_META_DB_USER: supabase_admin
+      PG_META_DB_PASSWORD: your-super-secret-and-long-postgres-password
 
-  #   x-casaos: # CasaOS specific configuration #################################
-  #     envs:
-  #       - container: PG_META_DB_HOST
-  #         description:
-  #           en_us: The database host for Postgres Meta
-  #           fr_fr: L'hôte de la base de données pour Postgres Meta
-  #       - container: PG_META_DB_PORT
-  #         description:
-  #           en_us: The database port for Postgres Meta
-  #           fr_fr: Le port de la base de données pour Postgres Meta
-  #       - container: PG_META_DB_NAME
-  #         description:
-  #           en_us: The database name for Postgres Meta
-  #           fr_fr: Le nom de la base de données pour Postgres Meta
-  #       - container: PG_META_DB_PASSWORD
-  #         description:
-  #           en_us: The database password for Postgres Meta
-  #           fr_fr: Le mot de passe de la base de données pour Postgres Meta
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: PG_META_DB_HOST
+          description:
+            en_us: The database host for Postgres Meta
+            fr_fr: L'hôte de la base de données pour Postgres Meta
+        - container: PG_META_DB_PORT
+          description:
+            en_us: The database port for Postgres Meta
+            fr_fr: Le port de la base de données pour Postgres Meta
+        - container: PG_META_DB_NAME
+          description:
+            en_us: The database name for Postgres Meta
+            fr_fr: Le nom de la base de données pour Postgres Meta
+        - container: PG_META_DB_PASSWORD
+          description:
+            en_us: The database password for Postgres Meta
+            fr_fr: Le mot de passe de la base de données pour Postgres Meta
 
-  # #############################################################################
-  # # Realtime
-  # #############################################################################
-  # realtime:
-  #   container_name: realtime-dev.supabase-realtime
-  #   image: supabase/realtime:v2.34.40
-  #   restart: unless-stopped
-  #   # depends_on:
-  #   #   db:
-  #   #     condition: service_healthy
-  #   #   analytics:
-  #   #     condition: service_healthy
-  #   healthcheck:
-  #     test:
-  #       [
-  #         "CMD",
-  #         "curl",
-  #         "-sSfL",
-  #         "--head",
-  #         "-o",
-  #         "/dev/null",
-  #         "-H",
-  #         "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
-  #         "http://localhost:4000/api/tenants/realtime-dev/health",
-  #       ]
-  #     timeout: 5s
-  #     interval: 5s
-  #     retries: 3
-  #   environment:
-  #     PORT: 4000
-  #     DB_HOST: db
-  #     DB_PORT: 5432
-  #     DB_USER: supabase_admin
-  #     DB_PASSWORD: your-super-secret-and-long-postgres-password
-  #     DB_NAME: postgres
-  #     DB_AFTER_CONNECT_QUERY: "SET search_path TO _realtime"
-  #     DB_ENC_KEY: supabaserealtime
-  #     API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
-  #     SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
-  #     ERL_AFLAGS: -proto_dist inet_tcp
-  #     DNS_NODES: "''"
-  #     RLIMIT_NOFILE: "10000"
-  #     APP_NAME: realtime
-  #     SEED_SELF_HOST: "true"
-  #     RUN_JANITOR: "true"
+  #############################################################################
+  # Realtime
+  #############################################################################
+  realtime:
+    container_name: realtime-dev.supabase-realtime
+    image: supabase/realtime:v2.34.40
+    restart: unless-stopped
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   analytics:
+    #     condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-sSfL",
+          "--head",
+          "-o",
+          "/dev/null",
+          "-H",
+          "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
+          "http://localhost:4000/api/tenants/realtime-dev/health",
+        ]
+      timeout: 5s
+      interval: 5s
+      retries: 3
+    environment:
+      PORT: 4000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: supabase_admin
+      DB_PASSWORD: your-super-secret-and-long-postgres-password
+      DB_NAME: postgres
+      DB_AFTER_CONNECT_QUERY: "SET search_path TO _realtime"
+      DB_ENC_KEY: supabaserealtime
+      API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+      ERL_AFLAGS: -proto_dist inet_tcp
+      DNS_NODES: "''"
+      RLIMIT_NOFILE: "10000"
+      APP_NAME: realtime
+      SEED_SELF_HOST: "true"
+      RUN_JANITOR: "true"
 
-  #   x-casaos: # CasaOS specific configuration #################################
-  #     envs:
-  #       - container: DB_HOST
-  #         description:
-  #           en_us: The database host for Realtime
-  #           fr_fr: L'hôte de la base de données pour Realtime
-  #       - container: DB_PORT
-  #         description:
-  #           en_us: The database port for Realtime
-  #           fr_fr: Le port de la base de données pour Realtime
-  #       - container: DB_PASSWORD
-  #         description:
-  #           en_us: The database password for Realtime
-  #           fr_fr: Le mot de passe de la base de données pour Realtime
-  #       - container: DB_NAME
-  #         description:
-  #           en_us: The database name for Realtime
-  #           fr_fr: Le nom de la base de données pour Realtime
-  #       - container: API_JWT_SECRET
-  #         description:
-  #           en_us: The JWT secret for Realtime
-  #           fr_fr: Le secret JWT pour Realtime
-  #       - container: SECRET_KEY_BASE
-  #         description:
-  #           en_us: The secret key base for Realtime
-  #           fr_fr: La base de clés secrètes pour Realtime
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: DB_HOST
+          description:
+            en_us: The database host for Realtime
+            fr_fr: L'hôte de la base de données pour Realtime
+        - container: DB_PORT
+          description:
+            en_us: The database port for Realtime
+            fr_fr: Le port de la base de données pour Realtime
+        - container: DB_PASSWORD
+          description:
+            en_us: The database password for Realtime
+            fr_fr: Le mot de passe de la base de données pour Realtime
+        - container: DB_NAME
+          description:
+            en_us: The database name for Realtime
+            fr_fr: Le nom de la base de données pour Realtime
+        - container: API_JWT_SECRET
+          description:
+            en_us: The JWT secret for Realtime
+            fr_fr: Le secret JWT pour Realtime
+        - container: SECRET_KEY_BASE
+          description:
+            en_us: The secret key base for Realtime
+            fr_fr: La base de clés secrètes pour Realtime
 
   # #############################################################################
   # # Edge Functions
