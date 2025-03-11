@@ -19,7 +19,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./volumes/api/kong.yml:/home/kong/temp.yml:ro
+      - /DATA/AppData/$AppID/volumes/api/kong.yml:/home/kong/temp.yml:ro
     # depends_on:
     #   analytics:
     #     condition: service_healthy
