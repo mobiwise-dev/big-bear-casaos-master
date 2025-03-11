@@ -1,0 +1,100 @@
+# ███╗   ███╗ ██████╗ ██████╗ ██╗██╗    ██╗██╗███████╗███████╗
+# ████╗ ████║██╔═══██╗██╔══██╗██║██║    ██║██║██╔════╝██╔════╝
+# ██╔████╔██║██║   ██║██████╔╝██║██║ █╗ ██║██║███████╗█████╗
+# ██║╚██╔╝██║██║   ██║██╔══██╗██║██║███╗██║██║╚════██║██╔══╝
+# ██║ ╚═╝ ██║╚██████╔╝██████╔╝██║╚███╔███╔╝██║███████║███████╗
+# ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝ ╚══╝╚══╝ ╚═╝╚══════╝╚══════╝
+# MobiWise Supabase - 1.0.0 - 20250315 - https://mobiwise.dev
+
+name: mobiwise-supabase
+
+services:
+  #############################################################################
+  # Kong (API Gateway)
+  #############################################################################
+  kong:
+    container_name: supabase-kong
+    image: kong:2.8.5
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    volumes:
+      - /DATA/AppData/$AppID/volumes/api/kong.yml:/home/kong/temp.yml:ro
+    depends_on:
+      analytics:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: "64 160k"
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      DASHBOARD_USERNAME: supabase
+      DASHBOARD_PASSWORD: this_password_is_insecure_and_should_be_updated
+    entrypoint: >
+      bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: SUPABASE_ANON_KEY
+          description:
+            en_us: Supabase ANON Key
+            fr_fr: Clé ANON Supabase
+        - container: SUPABASE_SERVICE_KEY
+          description:
+            en_us: Supabase Service Key
+            fr_fr: Clé de service Supabase
+        - container: DASHBOARD_USERNAME
+          description:
+            en_us: Dashboard username
+            fr_fr: Nom utilisateur du tableau de bord
+        - container: DASHBOARD_PASSWORD
+          description:
+            en_us: Password for the dashboard
+            fr_fr: Mot de passe du tableau de bord
+      volumes:
+        - container: /home/kong/kong.yml
+          description:
+            en_us: "Container Path: /home/kong/kong.yml"
+      ports:
+        - container: "8081"
+          description:
+            en_us: "Container Port: 8000"
+            fr_fr: "Port du conteneur: 8000"
+
+#############################################################################
+# CasaOS Specific Configuration
+#############################################################################
+x-casaos:
+  architectures:
+    - amd64
+    - arm
+  main: kong # Main service of the application
+  index: /
+  port_map: "8081"
+
+  author: MobiWise
+  category: MobiWise
+  developer: Supabase
+  title:
+    en_us: Kong API Gateway
+  tagline:
+    en_us: Open-source alternative to Firebase
+    fr_fr: Une alternative open-source à Firebase
+  description:
+    en_us: Supabase is an open-source alternative to Firebase, providing authentication, databases, storage, and serverless functions.
+    fr_fr: Supabase est une alternative open-source à Firebase, offrant authentification, bases de données, stockage et fonctions serverless.
+  icon: https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-logo-icon.png
+  thumbnail: https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-thumbnail.png
+  screenshot_link:
+    - https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-thumbnail.png
+    - https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-table-editor.png
+  tips:
+    before_install:
+      en_us: |
+        To generate your service and ANON keys, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
+      fr_fr: |
+        Pour générer vos clés de service et ANON, https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
