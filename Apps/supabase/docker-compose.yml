@@ -74,11 +74,11 @@ services:
     restart: unless-stopped
     ports:
       - 3000:3000
-    healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/platform/profile').then((r) => { if (r.status !== 200) throw new Error(r.status) })"]
-      timeout: 10s
-      interval: 5s
-      retries: 3
+    # healthcheck:
+    #   test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/platform/profile').then((r) => { if (r.status !== 200) throw new Error(r.status) })"]
+    #   timeout: 10s
+    #   interval: 5s
+    #   retries: 3
     # depends_on:
     #   analytics:
     #     condition: service_healthy
@@ -179,11 +179,11 @@ services:
       - /DATA/AppData/$AppID/volumes/db/pooler.sql:/docker-entrypoint-initdb.d/migrations/99-pooler.sql:Z
       - /DATA/AppData/$AppID/volumes/db/postgresql-custom:/etc/postgresql-custom:Z
 
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+    # healthcheck:
+    #   test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 10
     # depends_on:
     #   vector:
     #     condition: service_healthy
@@ -300,11 +300,11 @@ services:
     restart: unless-stopped
     volumes:
       - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/status"]
-      timeout: 5s
-      interval: 5s
-      retries: 3
+    # healthcheck:
+    #   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/status"]
+    #   timeout: 5s
+    #   interval: 5s
+    #   retries: 3
     # depends_on:
     #   db:
     #     condition: service_healthy
@@ -358,11 +358,11 @@ services:
     restart: unless-stopped
     volumes:
       - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
-    healthcheck:
-      test: ["CMD", "imgproxy", "health"]
-      timeout: 5s
-      interval: 5s
-      retries: 3
+    # healthcheck:
+    #   test: ["CMD", "imgproxy", "health"]
+    #   timeout: 5s
+    #   interval: 5s
+    #   retries: 3
     environment:
       IMGPROXY_BIND: ":5001"
       IMGPROXY_LOCAL_FILESYSTEM_ROOT: "/var/lib/storage"
@@ -427,22 +427,22 @@ services:
     #     condition: service_healthy
     #   analytics:
     #     condition: service_healthy
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-sSfL",
-          "--head",
-          "-o",
-          "/dev/null",
-          "-H",
-          "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
-          "http://localhost:4000/api/tenants/realtime-dev/health",
-        ]
-      timeout: 5s
-      interval: 5s
-      retries: 3
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD",
+    #       "curl",
+    #       "-sSfL",
+    #       "--head",
+    #       "-o",
+    #       "/dev/null",
+    #       "-H",
+    #       "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE",
+    #       "http://localhost:4000/api/tenants/realtime-dev/health",
+    #     ]
+    #   timeout: 5s
+    #   interval: 5s
+    #   retries: 3
     environment:
       PORT: 4000
       DB_HOST: db
@@ -543,11 +543,11 @@ services:
     container_name: supabase-auth
     image: supabase/gotrue:v2.169.0
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
-      timeout: 5s
-      interval: 5s
-      retries: 3
+    # healthcheck:
+    #   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
+    #   timeout: 5s
+    #   interval: 5s
+    #   retries: 3
     # depends_on:
     #   db:
     #     condition: service_healthy
@@ -819,11 +819,11 @@ services:
       - 4000:4000
     volumes:
       - /DATA/AppData/$AppID/volumes/pooler/pooler.exs:/etc/pooler/pooler.exs:ro
-    healthcheck:
-      test: ["CMD", "curl", "-sSfL", "--head", "-o", "/dev/null", "http://127.0.0.1:4000/api/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "curl", "-sSfL", "--head", "-o", "/dev/null", "http://127.0.0.1:4000/api/health"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
     # depends_on:
     #   db:
     #     condition: service_healthy
