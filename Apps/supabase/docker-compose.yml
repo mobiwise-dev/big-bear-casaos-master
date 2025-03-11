@@ -241,10 +241,10 @@ services:
         - container: /etc/postgresql-custom
           description:
             en_us: "Container Path: /etc/postgresql-custom"
-      # ports:
-      #   - container: "5432"
-      #     description:
-      #       en_us: "Container Port: 5432"
+      ports:
+        - container: "5432"
+          description:
+            en_us: "Container Port: 5432"
 
   # #############################################################################
   # # REST (PostgREST)
