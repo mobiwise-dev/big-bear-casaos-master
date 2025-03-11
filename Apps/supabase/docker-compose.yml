@@ -102,8 +102,8 @@ services:
       LOGFLARE_URL: http://analytics:4000
       NEXT_PUBLIC_ENABLE_LOGS: true
       NEXT_ANALYTICS_BACKEND_PROVIDER: postgres # or bigquery
-    # ---------------------------------------------------------------------------
-    x-casaos: # CasaOS specific configuration
+
+    x-casaos: # CasaOS specific configuration #################################
       envs:
         - container: POSTGRES_PASSWORD
           description:
@@ -162,6 +162,91 @@ services:
             fr_fr: "Port du conteneur: 3000"
 
   #############################################################################
+  # DB internal (Supabase/Postgres)
+  #############################################################################
+  db:
+    container_name: supabase-db
+    image: supabase/postgres:15.8.1.048
+    restart: unless-stopped
+    volumes:
+      - /DATA/AppData/$AppID/volumes/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
+      - /DATA/AppData/$AppID/volumes/db/webhooks.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z
+      - /DATA/AppData/$AppID/volumes/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
+      - /DATA/AppData/$AppID/volumes/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z
+      - /DATA/AppData/$AppID/volumes/db/data:/var/lib/postgresql/data:Z
+      - /DATA/AppData/$AppID/volumes/db/_supabase.sql:/docker-entrypoint-initdb.d/migrations/97-_supabase.sql:Z
+      - /DATA/AppData/$AppID/volumes/db/logs.sql:/docker-entrypoint-initdb.d/migrations/99-logs.sql:Z
+      - /DATA/AppData/$AppID/volumes/db/pooler.sql:/docker-entrypoint-initdb.d/migrations/99-pooler.sql:Z
+      - /DATA/AppData/$AppID/volumes/db/postgresql-custom:/etc/postgresql-custom:Z
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      vector:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGPORT: 5432
+      POSTGRES_PORT: 5432
+      PGPASSWORD: your-super-secret-and-long-postgres-password
+      POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
+      PGDATABASE: postgres
+      POSTGRES_DB: postgres
+      JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      JWT_EXP: 3600
+    # command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "log_min_messages=fatal"]
+    command: ["postgres", "-c", "config_file=/etc/postgresql-custom/postgresql.conf", "-c", "log_min_messages=fatal"]
+
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: PGPORT
+          description:
+            en_us: The Postgres port
+            fr_fr: Le port Postgres
+        - container: POSTGRES_PORT
+          description:
+            en_us: The Postgres port
+            fr_fr: Le port Postgres
+        - container: PGPASSWORD
+          description:
+            en_us: The Postgres password
+            fr_fr: Le mot de passe Postgres
+        - container: POSTGRES_PASSWORD
+          description:
+            en_us: The Postgres password
+            fr_fr: Le mot de passe Postgres
+        - container: PGDATABASE
+          description:
+            en_us: The Postgres database
+            fr_fr: La base de données Postgres
+        - container: POSTGRES_DB
+          description:
+            en_us: The Postgres database
+            fr_fr: La base de données Postgres
+        - container: JWT_SECRET
+          description:
+            en_us: The JWT secret
+            fr_fr: Le secret JWT
+        - container: JWT_EXP
+          description:
+            en_us: The JWT expiry
+            fr_fr: L'expiration JWT
+      volumes:
+        - container: /var/lib/postgresql/data
+          description:
+            en_us: "Container Path: /var/lib/postgresql/data"
+        - container: /etc/postgresql-custom
+          description:
+            en_us: "Container Path: /etc/postgresql-custom"
+      ports:
+        - container: "5432"
+          description:
+            en_us: "Container Port: 5432"
+
+  #############################################################################
   # Analytics (Logflare)
   #############################################################################
   analytics:
@@ -195,7 +280,7 @@ services:
       POSTGRES_BACKEND_SCHEMA: _analytics
       LOGFLARE_FEATURE_FLAG_OVERRIDE: "multibackend=true"
 
-    x-casaos: # CasaOS specific configuration
+    x-casaos: # CasaOS specific configuration #################################
       envs:
         - container: DB_USERNAME
           description:
