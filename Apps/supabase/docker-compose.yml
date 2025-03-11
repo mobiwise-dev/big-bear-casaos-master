@@ -906,9 +906,6 @@ services:
             en_us: "Container Port: 4000"
             fr_fr: "Port du conteneur: 4000"
 
-volumes:
-  db-config:
-
 #############################################################################
 # CasaOS Specific Configuration
 #############################################################################
