@@ -20,9 +20,9 @@ services:
       - 8000:8000
     volumes:
       - /DATA/AppData/$AppID/volumes/api/kong.yml:/home/kong/temp.yml:ro
-    depends_on:
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   analytics:
+    #     condition: service_healthy
     environment:
       KONG_DATABASE: "off"
       KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
@@ -79,9 +79,9 @@ services:
       timeout: 10s
       interval: 5s
       retries: 3
-    depends_on:
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   analytics:
+    #     condition: service_healthy
     environment:
       STUDIO_PG_META_URL: http://meta:8080
       POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
@@ -184,9 +184,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-    depends_on:
-      vector:
-        condition: service_healthy
+    # depends_on:
+    #   vector:
+    #     condition: service_healthy
     environment:
       POSTGRES_HOST: /var/run/postgresql
       PGPORT: 5432
@@ -253,11 +253,11 @@ services:
     container_name: supabase-rest
     image: postgrest/postgrest:v12.2.8
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   analytics:
+    #     condition: service_healthy
     environment:
       PGRST_DB_URI: postgres://authenticator:your-super-secret-and-long-postgres-password@db:5432/postgres
       PGRST_DB_SCHEMAS: public,storage,graphql_public
@@ -305,13 +305,13 @@ services:
       timeout: 5s
       interval: 5s
       retries: 3
-    depends_on:
-      db:
-        condition: service_healthy
-      rest:
-        condition: service_started
-      imgproxy:
-        condition: service_started
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   rest:
+    #     condition: service_started
+    #   imgproxy:
+    #     condition: service_started
     environment:
       PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
       ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
@@ -383,11 +383,11 @@ services:
     container_name: supabase-meta
     image: supabase/postgres-meta:v0.86.1
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   analytics:
+    #     condition: service_healthy
     environment:
       PG_META_PORT: 8080
       PG_META_DB_HOST: db
@@ -422,11 +422,11 @@ services:
     container_name: realtime-dev.supabase-realtime
     image: supabase/realtime:v2.34.40
     restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   analytics:
+    #     condition: service_healthy
     healthcheck:
       test:
         [
@@ -497,9 +497,9 @@ services:
     restart: unless-stopped
     volumes:
       - /DATA/AppData/$AppID/volumes/functions:/home/deno/functions:Z
-    depends_on:
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   analytics:
+    #     condition: service_healthy
     environment:
       SUPABASE_URL: http://kong:8000
       JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
@@ -548,11 +548,11 @@ services:
       timeout: 5s
       interval: 5s
       retries: 3
-    depends_on:
-      db:
-        condition: service_healthy
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   analytics:
+    #     condition: service_healthy
     environment:
       GOTRUE_API_HOST: "0.0.0.0"
       GOTRUE_API_PORT: 9999
@@ -756,9 +756,9 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
-    depends_on:
-      db:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     environment:
       LOGFLARE_NODE_HOST: "127.0.0.1"
       DB_USERNAME: supabase_admin
@@ -824,11 +824,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    depends_on:
-      db:
-        condition: service_healthy
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    #   analytics:
+    #     condition: service_healthy
     environment:
       PORT: 4000
       POSTGRES_PORT: 5432
