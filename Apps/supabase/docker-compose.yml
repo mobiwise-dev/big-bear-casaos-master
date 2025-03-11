@@ -18,9 +18,9 @@ services:
         protocol: tcp
     volumes:
       - ./volumes/api/kong.yml:/home/kong/temp.yml:ro
-    depends_on:
-      analytics:
-        condition: service_healthy
+    # depends_on:
+    #   analytics:
+    #     condition: service_healthy
     environment:
       KONG_DATABASE: "off"
       KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
