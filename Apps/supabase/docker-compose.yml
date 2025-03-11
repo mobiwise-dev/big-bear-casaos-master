@@ -247,6 +247,51 @@ services:
             en_us: "Container Port: 5432"
 
   #############################################################################
+  # REST (PostgREST)
+  #############################################################################
+  rest:
+    container_name: supabase-rest
+    image: postgrest/postgrest:v12.2.8
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      analytics:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      PGRST_APP_SETTINGS_JWT_EXP: 3600
+    command: ["postgrest"]
+
+    x-casaos: # CasaOS specific configuration
+      envs:
+        - container: PGRST_DB_URI
+          description:
+            en_us: The database URI for PostgREST
+            fr_fr: L'URI de la base de données pour PostgREST
+        - container: PGRST_DB_SCHEMAS
+          description:
+            en_us: The database schemas for PostgREST
+            fr_fr: Les schémas de base de données pour PostgREST
+        - container: PGRST_JWT_SECRET
+          description:
+            en_us: The JWT secret for PostgREST
+            fr_fr: Le secret JWT pour PostgREST
+        - container: PGRST_APP_SETTINGS_JWT_SECRET
+          description:
+            en_us: The JWT secret for PostgREST app settings
+            fr_fr: Le secret JWT pour les paramètres de l'application PostgREST
+        - container: PGRST_APP_SETTINGS_JWT_EXP
+          description:
+            en_us: The JWT expiry for PostgREST app settings
+            fr_fr: L'expiration JWT pour les paramètres de l'application PostgREST
+
+  #############################################################################
   # Vector (log collection for analytics)
   #############################################################################
   vector:
