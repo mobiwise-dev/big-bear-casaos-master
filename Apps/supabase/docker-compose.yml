@@ -816,7 +816,7 @@ services:
     image: supabase/supavisor:2.4.11
     restart: unless-stopped
     ports:
-      - 5432:5432
+      - 4000:4000
     volumes:
       - /DATA/AppData/$AppID/volumes/pooler/pooler.exs:/etc/pooler/pooler.exs:ro
     healthcheck:
