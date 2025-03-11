@@ -35,7 +35,7 @@ services:
       DASHBOARD_USERNAME: supabase
       DASHBOARD_PASSWORD: this_password_is_insecure_and_should_be_updated
     entrypoint: >
-      bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+      bash -c 'cp /home/kong/temp.yml /home/kong/kong.yml && /docker-entrypoint.sh kong docker-start'
 
     x-casaos: # CasaOS specific configuration #################################
       envs:
