@@ -155,6 +155,77 @@ services:
           description:
             en_us: The analytics backend provider for Supabase Studio (postgres or bigquery)
             fr_fr: Le fournisseur d'analyse backend pour Supabase Studio (postgres ou bigquery)
+      ports:
+        - container: "3000"
+          description:
+            en_us: "Container Port: 3000"
+            fr_fr: "Port du conteneur: 3000"
+
+  #############################################################################
+  # Analytics (Logflare)
+  #############################################################################
+  analytics:
+    container_name: supabase-analytics
+    image: supabase/logflare:1.12.4
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:4000/health"]
+      timeout: 5s
+      interval: 5s
+      retries: 10
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+    environment:
+      LOGFLARE_NODE_HOST: "127.0.0.1"
+      DB_USERNAME: supabase_admin
+      DB_DATABASE: _supabase
+      DB_HOSTNAME: db
+      DB_PORT: 5432
+      DB_PASSWORD: your-super-secret-and-long-postgres-password
+      DB_SCHEMA: _analytics
+      LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
+      LOGFLARE_SINGLE_TENANT: true
+      LOGFLARE_SUPABASE_MODE: true
+      LOGFLARE_MIN_CLUSTER_SIZE: 1
+
+      POSTGRES_BACKEND_URL: postgresql://supabase_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/_supabase
+      POSTGRES_BACKEND_SCHEMA: _analytics
+      LOGFLARE_FEATURE_FLAG_OVERRIDE: "multibackend=true"
+
+    x-casaos: # CasaOS specific configuration
+      envs:
+        - container: DB_USERNAME
+          description:
+            en_us: The database username for Logflare
+            fr_fr: Le nom d'utilisateur de la base de données pour Logflare
+        - container: DB_DATABASE
+          description:
+            en_us: The database for Logflare
+            fr_fr: La base de données pour Logflare
+        - container: DB_HOSTNAME
+          description:
+            en_us: The database hostname for Logflare
+            fr_fr: Le nom d'hôte de la base de données pour Logflare
+        - container: DB_PORT
+          description:
+            en_us: The database port for Logflare
+            fr_fr: Le port de la base de données pour Logflare
+        - container: DB_PASSWORD
+          description:
+            en_us: The database password for Logflare
+            fr_fr: Le mot de passe de la base de données pour Logflare
+        - container: LOGFLARE_API_KEY
+          description:
+            en_us: The API key for Logflare
+            fr_fr: La clé API pour Logflare
+      ports:
+        - container: "4000"
+          description:
+            en_us: "Container Port: 4000"
+            fr_fr: "Port du conteneur: 4000"
 
 #############################################################################
 # CasaOS Specific Configuration
