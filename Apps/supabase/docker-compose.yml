@@ -602,6 +602,10 @@ services:
           description:
             en_us: The external URL for the API
             fr_fr: L'URL externe pour l'API
+        - container: GOTRUE_DB_DATABASE_URL
+          description:
+            en_us: The database URL for GoTrue
+            fr_fr: L'URL de la base de données pour GoTrue
         - container: GOTRUE_SITE_URL
           description:
             en_us: The site URL for GoTrue
@@ -803,6 +807,107 @@ services:
           description:
             en_us: "Container Port: 4000"
             fr_fr: "Port du conteneur: 4000"
+
+  #############################################################################
+  # Supavisor (Pooler)
+  #############################################################################
+  supavisor:
+    container_name: supabase-pooler
+    image: supabase/supavisor:2.4.11
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - /DATA/AppData/$AppID/volumes/pooler/pooler.exs:/etc/pooler/pooler.exs:ro
+    healthcheck:
+      test: ["CMD", "curl", "-sSfL", "--head", "-o", "/dev/null", "http://127.0.0.1:4000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      db:
+        condition: service_healthy
+      analytics:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: your-super-secret-and-long-postgres-password
+      DATABASE_URL: ecto://supabase_admin:your-super-secret-and-long-postgres-password@db:5432/_supabase
+      CLUSTER_POSTGRES: true
+      SECRET_KEY_BASE: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+      VAULT_ENC_KEY: your-encryption-key-32-chars-min
+      API_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      METRICS_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters-long
+      REGION: local
+      ERL_AFLAGS: -proto_dist inet_tcp
+      POOLER_TENANT_ID: your-tenant-id
+      POOLER_DEFAULT_POOL_SIZE: 20
+      POOLER_MAX_CLIENT_CONN: 100
+      POOLER_POOL_MODE: transaction
+    command: >
+      /bin/sh -c '/app/bin/migrate && /app/bin/supavisor eval "$$(cat /etc/pooler/pooler.exs)" && /app/bin/server'
+
+    x-casaos: # CasaOS specific configuration
+      envs:
+        - container: POSTGRES_PORT
+          description:
+            en_us: The Postgres port for Pooler
+            fr_fr: Le port Postgres pour Pooler
+        - container: POSTGRES_DB
+          description:
+            en_us: The Postgres database for Pooler
+            fr_fr: La base de données Postgres pour Pooler
+        - container: POSTGRES_PASSWORD
+          description:
+            en_us: The Postgres password for Pooler
+            fr_fr: Le mot de passe Postgres pour Pooler
+        - container: DATABASE_URL
+          description:
+            en_us: The database URL for Pooler
+            fr_fr: L'URL de la base de données pour Pooler
+        - container: SECRET_KEY_BASE
+          description:
+            en_us: The secret key base for Pooler
+            fr_fr: La base de clés secrètes pour Pooler
+        - container: VAULT_ENC_KEY
+          description:
+            en_us: The Vault encryption key for Pooler
+            fr_fr: La clé de chiffrement Vault pour Pooler
+        - container: API_JWT_SECRET
+          description:
+            en_us: The API JWT secret for Pooler
+            fr_fr: Le secret JWT API pour Pooler
+        - container: METRICS_JWT_SECRET
+          description:
+            en_us: The metrics JWT secret for Pooler
+            fr_fr: Le secret JWT de métriques pour Pooler
+        - container: POOLER_TENANT_ID
+          description:
+            en_us: The tenant ID for Pooler
+            fr_fr: L'ID du locataire pour Pooler
+        - container: POOLER_DEFAULT_POOL_SIZE
+          description:
+            en_us: The default pool size for Pooler
+            fr_fr: La taille de pool par défaut pour Pooler
+        - container: POOLER_MAX_CLIENT_CONN
+          description:
+            en_us: The maximum client connections for Pooler
+            fr_fr: Les connexions client maximales pour Pooler
+      volumes:
+        - container: /etc/pooler/pooler.exs
+          description:
+            en_us: "Configuration file for Pooler"
+            fr_fr: "Fichier de configuration pour Pooler"
+      ports:
+        - container: "4000"
+          description:
+            en_us: "Container Port: 4000"
+            fr_fr: "Port du conteneur: 4000"
+
+volumes:
+  db-config:
 
 #############################################################################
 # CasaOS Specific Configuration
