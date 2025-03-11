@@ -6,7 +6,7 @@
 # ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝ ╚══╝╚══╝ ╚═╝╚══════╝╚══════╝
 # MobiWise Supabase - 1.0.0 - 20250315 - https://mobiwise.dev
 
-name: supabase
+name: mobiwise-supabase
 
 services:
   #############################################################################
@@ -37,7 +37,7 @@ services:
     entrypoint: >
       bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
 
-    x-casaos: # CasaOS specific configuration
+    x-casaos: # CasaOS specific configuration #################################
       envs:
         - container: SUPABASE_ANON_KEY
           description:
@@ -60,6 +60,7 @@ services:
           description:
             en_us: "Container Port: 8000"
             fr_fr: "Port du conteneur: 8000"
+
 #############################################################################
 # CasaOS Specific Configuration
 #############################################################################
@@ -68,22 +69,28 @@ x-casaos:
     - amd64
     - arm
   main: kong # Main service of the application
-  title:
-    en_us: Supabase
   index: /
   port_map: "8000"
 
-  developer: Supabase
   author: MobiWise
   category: MobiWise
+  developer: Supabase
+  title:
+    en_us: Supabase
+  tagline:
+    en_us: Open-source alternative to Firebase
+    fr_fr: Une alternative open-source à Firebase
   description:
     en_us: Supabase is an open-source alternative to Firebase, providing authentication, databases, storage, and serverless functions.
     fr_fr: Supabase est une alternative open-source à Firebase, offrant authentification, bases de données, stockage et fonctions serverless.
   icon: https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-logo-icon.png
+  thumbnail: https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-thumbnail.png
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-thumbnail.png
     - https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-table-editor.png
-  tagline:
-    en_us: Open-source alternative to Firebase
-    fr_fr: Une alternative open-source à Firebase
-  thumbnail: https://cdn.jsdelivr.net/gh/mobiwise-dev/big-bear-casaos-master/Apps/supabase/supabase-thumbnail.png
+  tips:
+    before_install:
+      en_us: |
+        To generate your service and ANON keys, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
+      fr_fr: |
+        Pour générer vos clés de service et ANON, https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
