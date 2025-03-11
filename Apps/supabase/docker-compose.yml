@@ -247,6 +247,37 @@ services:
             en_us: "Container Port: 5432"
 
   #############################################################################
+  # Vector (log collection for analytics)
+  #############################################################################
+  vector:
+    container_name: supabase-vector
+    image: timberio/vector:latest-alpine
+    restart: unless-stopped
+    volumes:
+      - /DATA/AppData/$AppID/volumes/vector/vector.yml:/etc/vector/vector.yml:ro
+      - ${DOCKER_SOCKET_LOCATION:-/var/run/docker.sock}:/var/run/docker.sock:ro
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9001/health"]
+      timeout: 5s
+      interval: 5s
+      retries: 3
+    environment:
+      LOGFLARE_API_KEY: your-super-secret-and-long-logflare-key
+    command: ["--config", "/etc/vector/vector.yml"]
+
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: LOGFLARE_API_KEY
+          description:
+            en_us: The API key for Vector
+            fr_fr: La clé API pour Vector
+      volumes:
+        - container: /etc/vector/vector.yml
+          description:
+            en_us: "Configuration file for Vector"
+            fr_fr: "Fichier de configuration pour Vector"
+
+  #############################################################################
   # Analytics (Logflare)
   #############################################################################
   analytics:
