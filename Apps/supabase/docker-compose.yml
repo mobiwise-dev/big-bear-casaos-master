@@ -336,9 +336,9 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       LOGFLARE_NODE_HOST: "127.0.0.1"
       DB_USERNAME: supabase_admin
