@@ -349,32 +349,32 @@ services:
           description:
             en_us: "Container Path: /var/lib/storage"
 
-  # #############################################################################
-  # # Imgproxy (to transform images)
-  # #############################################################################
-  # imgproxy:
-  #   container_name: supabase-imgproxy
-  #   image: darthsim/imgproxy:v3.27.2
-  #   restart: unless-stopped
-  #   volumes:
-  #     - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
-  #   healthcheck:
-  #     test: ["CMD", "imgproxy", "health"]
-  #     timeout: 5s
-  #     interval: 5s
-  #     retries: 3
-  #   environment:
-  #     IMGPROXY_BIND: ":5001"
-  #     IMGPROXY_LOCAL_FILESYSTEM_ROOT: "/var/lib/storage"
-  #     IMGPROXY_USE_ETAG: "true"
-  #     IMGPROXY_ENABLE_WEBP_DETECTION: "true"
+  #############################################################################
+  # Imgproxy (to transform images)
+  #############################################################################
+  imgproxy:
+    container_name: supabase-imgproxy
+    image: darthsim/imgproxy:v3.27.2
+    restart: unless-stopped
+    volumes:
+      - /DATA/AppData/$AppID/volumes/storage:/var/lib/storage:z
+    healthcheck:
+      test: ["CMD", "imgproxy", "health"]
+      timeout: 5s
+      interval: 5s
+      retries: 3
+    environment:
+      IMGPROXY_BIND: ":5001"
+      IMGPROXY_LOCAL_FILESYSTEM_ROOT: "/var/lib/storage"
+      IMGPROXY_USE_ETAG: "true"
+      IMGPROXY_ENABLE_WEBP_DETECTION: "true"
 
-  #   x-casaos: # CasaOS specific configuration #################################
-  #     envs:
-  #       - container: IMGPROXY_ENABLE_WEBP_DETECTION
-  #         description:
-  #           en_us: Enable WebP detection for Imgproxy (true or false)
-  #           fr_fr: Activer la détection WebP pour Imgproxy (true ou false)
+    x-casaos: # CasaOS specific configuration #################################
+      envs:
+        - container: IMGPROXY_ENABLE_WEBP_DETECTION
+          description:
+            en_us: Enable WebP detection for Imgproxy (true or false)
+            fr_fr: Activer la détection WebP pour Imgproxy (true ou false)
 
   # #############################################################################
   # # Meta (Postgres Meta)
