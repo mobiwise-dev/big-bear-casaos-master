@@ -55,11 +55,106 @@ services:
           description:
             en_us: Password for the dashboard
             fr_fr: Mot de passe du tableau de bord
+      volumes:
+        - container: /home/kong/kong.yml
+          description:
+            en_us: "Container Path: /home/kong/kong.yml"
       ports:
         - container: "8000"
           description:
             en_us: "Container Port: 8000"
             fr_fr: "Port du conteneur: 8000"
+
+  #############################################################################
+  # Supabase Studio (main interface)
+  #############################################################################
+  studio:
+    container_name: supabase-studio
+    image: supabase/studio:20250310-6a23794
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/platform/profile').then((r) => { if (r.status !== 200) throw new Error(r.status) })"]
+      timeout: 10s
+      interval: 5s
+      retries: 3
+    # depends_on:
+    #   analytics:
+    #     condition: service_healthy
+    environment:
+      STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      DEFAULT_ORGANIZATION_NAME: ${STUDIO_DEFAULT_ORGANIZATION}
+      DEFAULT_PROJECT_NAME: ${STUDIO_DEFAULT_PROJECT}
+
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
+
+      AUTH_JWT_SECRET: ${JWT_SECRET}
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+
+      LOGFLARE_API_KEY: ${LOGFLARE_API_KEY}
+      LOGFLARE_URL: http://analytics:4000
+      NEXT_PUBLIC_ENABLE_LOGS: true
+      NEXT_ANALYTICS_BACKEND_PROVIDER: postgres # or bigquery
+    # ---------------------------------------------------------------------------
+    x-casaos: # CasaOS specific configuration
+      envs:
+        - container: POSTGRES_PASSWORD
+          description:
+            en_us: The password for the Postgres database
+            fr_fr: Le mot de passe de la base de données Postgres
+
+        - container: DEFAULT_ORGANIZATION_NAME
+          description:
+            en_us: The default organization name for Supabase Studio
+            fr_fr: Le nom de l'organisation par défaut pour Supabase Studio
+        - container: DEFAULT_PROJECT_NAME
+          description:
+            en_us: The default project name for Supabase Studio
+            fr_fr: Le nom du projet par défaut pour Supabase Studio
+
+        - container: OPENAI_API_KEY
+          description:
+            en_us: The OpenAI API key for Supabase Studio
+            fr_fr: La clé API OpenAI pour Supabase Studio
+
+        - container: SUPABASE_PUBLIC_URL
+          description:
+            en_us: The public URL for Supabase Studio
+            fr_fr: L'URL publique pour Supabase Studio
+
+        - container: AUTH_JWT_SECRET
+          description:
+            en_us: The JWT secret for Supabase
+            fr_fr: Le secret JWT pour Supabase
+        - container: SUPABASE_ANON_KEY
+          description:
+            en_us: The anonymous key for Supabase (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+            fr_fr: La clé anonyme pour Supabase (pour générer, visitez https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+        - container: SUPABASE_SERVICE_KEY
+          description:
+            en_us: The service role key for Supabase (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+            fr_fr: La clé de rôle de service pour Supabase (to genertate, visit https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+
+        - container: LOGFLARE_API_KEY
+          description:
+            en_us: The Logflare API key for Supabase Studio
+            fr_fr: La clé API Logflare pour Supabase Studio
+
+        - container: NEXT_PUBLIC_ENABLE_LOGS
+          description:
+            en_us: Enable logs in Supabase Studio
+            fr_fr: Activer les logs dans Supabase Studio
+        - container: NEXT_ANALYTICS_BACKEND_PROVIDER
+          description:
+            en_us: The analytics backend provider for Supabase Studio (postgres or bigquery)
+            fr_fr: Le fournisseur d'analyse backend pour Supabase Studio (postgres ou bigquery)
 
 #############################################################################
 # CasaOS Specific Configuration
